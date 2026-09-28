@@ -8,7 +8,7 @@
  * - Crop / plant selection
  * - Custom crop name when "Other" is selected
  * - AI disease diagnosis request
- * - Ollama/Qwen result display
+ * - Gemini API result display
  * - Sample image testing
  * - YouTube tutorial display
  * - Error handling

@@ -1,12 +1,8 @@
-import base64
 import os
+from PIL import Image
 
-import requests
+from ai.gemini_client import generate_multimodal
 
-
-OLLAMA_URL = "http://localhost:11434/api/generate"
-OLLAMA_MODEL = "qwen2.5vl:3b"
-OLLAMA_TIMEOUT = 120
 
 SUPPORTED_LANGUAGES = {
     "English": "English",
@@ -28,11 +24,11 @@ def generate_image_response(
     language="English"
 ):
     """
-    Analyze an image using the local Ollama vision model.
+    Analyze an image using the Gemini API.
 
     This service belongs to the general KISAAN AI Assistant.
     It is intentionally separate from vision_service.py so the
-    existing Leaf Doctor remains unchanged.
+    Leaf Doctor maintains its distinct two-stage pipeline.
     """
 
     if not image_path:
@@ -60,15 +56,9 @@ def generate_image_response(
         message = "Describe and explain this image."
 
     try:
-        with open(image_path, "rb") as image_file:
-            image_base64 = base64.b64encode(
-                image_file.read()
-            ).decode("utf-8")
-
-    except OSError as exc:
-        raise ValueError(
-            f"Unable to read image: {exc}"
-        ) from exc
+        pil_image = Image.open(image_path)
+    except Exception as exc:
+        raise ValueError(f"Unable to read image file: {exc}") from exc
 
     prompt = f"""
 You are KISAAN AI Assistant, a multimodal agricultural assistant
@@ -138,48 +128,10 @@ User's question:
 Answer only the user's question in {response_language}.
 """
 
-    payload = {
-        "model": OLLAMA_MODEL,
-        "prompt": prompt,
-        "images": [image_base64],
-        "stream": False,
-        "options": {
-            "temperature": 0.2
-        }
-    }
-
     try:
-        response = requests.post(
-            OLLAMA_URL,
-            json=payload,
-            timeout=OLLAMA_TIMEOUT
-        )
-
-        response.raise_for_status()
-
-        data = response.json()
-
-        answer = data.get("response", "").strip()
-
+        answer = generate_multimodal([pil_image, prompt], temperature=0.2)
         if not answer:
-            raise RuntimeError(
-                "Ollama returned an empty response."
-            )
-
+            raise RuntimeError("Gemini API returned an empty response.")
         return answer
-
-    except requests.exceptions.ConnectionError as exc:
-        raise RuntimeError(
-            "Could not connect to Ollama. "
-            "Make sure Ollama is running."
-        ) from exc
-
-    except requests.exceptions.Timeout as exc:
-        raise RuntimeError(
-            "Ollama took too long to analyze the image."
-        ) from exc
-
-    except requests.exceptions.RequestException as exc:
-        raise RuntimeError(
-            f"Ollama request failed: {exc}"
-        ) from exc
+    except Exception as exc:
+        raise RuntimeError(f"Gemini API image analysis failed: {exc}") from exc

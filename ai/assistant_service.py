@@ -1,9 +1,4 @@
-import requests
-
-
-OLLAMA_URL = "http://localhost:11434/api/generate"
-OLLAMA_MODEL = "qwen3:8b"
-OLLAMA_TIMEOUT = 120
+from ai.gemini_client import generate_text
 
 
 SUPPORTED_LANGUAGES = {
@@ -15,7 +10,7 @@ SUPPORTED_LANGUAGES = {
 
 def generate_assistant_response(message, language="English"):
     """
-    Generate a response from the local Ollama model.
+    Generate a response using Google Gemini API.
 
     The response language is controlled by the language selected
     by the user in the KISAAN AI Assistant.
@@ -79,44 +74,10 @@ User message:
 Answer only the user's question in {response_language}:
 """
 
-    payload = {
-        "model": OLLAMA_MODEL,
-        "prompt": prompt,
-        "stream": False,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
-        "options": {
-            "temperature": 0.2                                                                                                                                                                                  
-        }
-    }
-
     try:
-        response = requests.post(
-            OLLAMA_URL,
-            json=payload,
-            timeout=OLLAMA_TIMEOUT
-        )
-
-        response.raise_for_status()
-
-        data = response.json()
-
-        answer = data.get("response", "").strip()
-
+        answer = generate_text(prompt, temperature=0.2)
         if not answer:
-            raise RuntimeError("Ollama returned an empty response.")
-
+            raise RuntimeError("Gemini API returned an empty response.")
         return answer
-
-    except requests.exceptions.ConnectionError:
-        raise RuntimeError(
-            "Could not connect to Ollama. Make sure Ollama is running."
-        )
-
-    except requests.exceptions.Timeout:
-        raise RuntimeError(
-            "Ollama took too long to respond."
-        )
-
-    except requests.exceptions.RequestException as exc:
-        raise RuntimeError(
-            f"Ollama request failed: {exc}"
-        )
+    except Exception as exc:
+        raise RuntimeError(f"Gemini API request failed: {exc}") from exc

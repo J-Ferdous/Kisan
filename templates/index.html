@@ -1930,11 +1930,11 @@
           if (!response.ok) throw new Error(data.error || "The assistant request failed.");
           removeThinkingIndicator();
           addMessage(data.response || "No response was returned.", "assistant");
-          status.textContent = "Local AI • Text + image + video chat";
+          status.textContent = "Gemini AI • Text + image + video chat";
         } catch (error) {
           removeThinkingIndicator();
           console.error("KISAAN AI Assistant error:", error);
-          addMessage(selectedLanguage === "Hindi" ? "AI से संपर्क नहीं हो सका। कृपया सुनिश्चित करें कि Flask और Ollama चल रहे हैं।" : selectedLanguage === "Bengali" ? "AI-এর সঙ্গে সংযোগ করা যায়নি। Flask এবং Ollama চালু আছে কি না পরীক্ষা করুন।" : "Could not connect to the AI. Please make sure Flask and Ollama are running.", "assistant");
+          addMessage(selectedLanguage === "Hindi" ? "AI से संपर्क नहीं हो सका। कृपया अपनी Gemini API Key की जाँच करें।" : selectedLanguage === "Bengali" ? "AI-এর সাথে সংযোগ তৈরি করা যায়নি। অনুগ্রহ করে আপনার Gemini API Key পরীক্ষা করুন।" : "Could not connect to the AI. Please make sure your Gemini API Key is configured.", "assistant");
           status.textContent = "Connection error";
         } finally {
           removeThinkingIndicator();

@@ -1,7 +1,7 @@
 """
 KISAAN - AI Smart Crop Advisor Service
 
-Uses a local Ollama server to generate structured crop recommendations
+Uses Google Gemini API to generate structured crop recommendations
 from farm, climate, soil and farmer-priority data.
 """
 
@@ -9,12 +9,9 @@ import json
 import re
 from copy import deepcopy
 
-import requests
+from ai.gemini_client import generate_text
 
 
-OLLAMA_URL = "http://localhost:11434/api/generate"
-OLLAMA_MODEL = "qwen2.5vl:3b"
-OLLAMA_TIMEOUT = 120
 MAX_ATTEMPTS = 2
 
 
@@ -173,30 +170,13 @@ def _normalize_recommendation(item, rank):
     }
 
 
-def _call_ollama(payload):
-    """Call Ollama and return the decoded HTTP JSON response."""
+def _call_gemini(prompt):
+    """Call Gemini API and return the raw JSON response string."""
     try:
-        response = requests.post(
-            OLLAMA_URL,
-            json=payload,
-            timeout=OLLAMA_TIMEOUT,
-        )
-    except requests.RequestException as exc:
+        return generate_text(prompt, temperature=0.2, response_json=True)
+    except Exception as exc:
         raise RuntimeError(
-            f"Could not connect to Ollama: {exc}"
-        ) from exc
-
-    if response.status_code != 200:
-        raise RuntimeError(
-            "Ollama returned HTTP "
-            f"{response.status_code}: {response.text[:500]}"
-        )
-
-    try:
-        return response.json()
-    except ValueError as exc:
-        raise RuntimeError(
-            "Ollama returned an invalid HTTP response."
+            f"Could not connect to Gemini API: {exc}"
         ) from exc
 
 
@@ -713,14 +693,12 @@ Use EXACTLY this structure:
 
 
 def _parse_and_validate_result(
-    ollama_data,
+    raw_model_response,
     water_availability,
     irrigation,
     requested_season,
 ):
-    """Parse, normalize and validate one Ollama response."""
-    raw_model_response = ollama_data.get("response", "")
-
+    """Parse, normalize and validate one Gemini response."""
     ai_result = _extract_json(
         raw_model_response
     )
@@ -816,7 +794,7 @@ def recommend_crops(
     rainfall=None,
 ):
     """
-    Generate the top three crop recommendations using Ollama.
+    Generate the top three crop recommendations using Gemini API.
 
     A failed validation receives one automatic retry with the
     validation error fed back to the model.
@@ -894,23 +872,13 @@ Do not explain the correction.
 Return ONLY the corrected JSON object.
 """
 
-        payload = {
-            "model": OLLAMA_MODEL,
-            "prompt": prompt,
-            "stream": False,
-            "format": "json",
-            "options": {
-                "temperature": 0.2,
-            },
-        }
-
         try:
-            ollama_data = _call_ollama(
-                payload=deepcopy(payload),
+            raw_response = _call_gemini(
+                prompt=prompt,
             )
 
             ai_result, recommendations = _parse_and_validate_result(
-                ollama_data=ollama_data,
+                raw_model_response=raw_response,
                 water_availability=water_availability,
                 irrigation=irrigation,
                 requested_season=season,
@@ -930,12 +898,11 @@ Return ONLY the corrected JSON object.
                 ),
                 "farm_context": farm_context,
                 "recommendations": recommendations,
-                "analysis_source": "ollama-qwen2.5vl",
+                "analysis_source": "gemini-api",
             }
 
         except RuntimeError:
-            # Network/Ollama server errors are not solved by asking
-            # the model to regenerate, so surface them immediately.
+            # Network/API server errors surface immediately
             raise
 
         except (ValueError, KeyError, TypeError) as exc:

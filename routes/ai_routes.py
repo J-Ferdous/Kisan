@@ -3,8 +3,8 @@ Kisan Web Project - AI Crop Disease Diagnostic Routes
 
 Handles:
 - Crop leaf image uploads
-- AI-powered disease diagnosis using local Ollama/Qwen2.5-VL
-- Heuristic fallback diagnosis if Ollama is unavailable
+- AI-powered disease diagnosis using Gemini API
+- Heuristic fallback diagnosis if Gemini API is unavailable
 - Disease diagnosis history
 - Database logging
 """
@@ -178,7 +178,7 @@ def heuristic_diagnosis(file_path):
     """
     Fallback diagnosis.
 
-    This is used only when the local Ollama AI model cannot
+    This is used only when the Gemini AI model cannot
     perform the diagnosis.
     """
 
@@ -242,7 +242,7 @@ def heuristic_diagnosis(file_path):
         ),
         "uncertain": True,
         "reasoning_summary": (
-            "Ollama was unavailable, so a basic image-color heuristic "
+            "Gemini API was unavailable, so a basic image-color heuristic "
             "was used instead of full AI validation."
         ),
         "disease_name": selected["disease_name"],
@@ -297,7 +297,7 @@ def diagnose_crop_disease():
     Diagnose a crop disease from an uploaded leaf image.
 
     Primary system:
-        Ollama + Qwen2.5-VL
+        Gemini API
 
     Fallback:
         Pillow RGB heuristic analysis
@@ -372,7 +372,7 @@ def diagnose_crop_disease():
     # Try real AI diagnosis first
     # --------------------------------------------------------
 
-    analysis_source = "ollama-qwen2.5vl"
+    analysis_source = "gemini-api"
 
     try:
 
@@ -406,13 +406,13 @@ def diagnose_crop_disease():
         )
 
     # --------------------------------------------------------
-    # Fallback if Ollama fails
+    # Fallback if Gemini fails
     # --------------------------------------------------------
 
     except Exception as exc:
 
         current_app.logger.warning(
-            "Ollama diagnosis failed. "
+            "Gemini diagnosis failed. "
             "Using fallback image analysis. Error: %s",
             exc,
         )
@@ -714,7 +714,7 @@ def ai_crop_advisor():
     Generate AI crop recommendations from farm conditions.
 
     Primary system:
-        Local Ollama + Qwen2.5-VL
+        Google Gemini API
     """
 
     data = request.get_json(silent=True)
@@ -835,7 +835,7 @@ def ai_crop_advisor():
         "status": "success",
         "analysis_source": result.get(
             "analysis_source",
-            "ollama-qwen2.5vl",
+            "gemini-api",
         ),
         "analysis_summary": result.get(
             "analysis_summary",

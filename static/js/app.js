@@ -302,7 +302,9 @@ if (videoContainer) {
 
     if (analysisSource) {
       analysisSource.textContent =
-        data.analysis_source === 'ollama-qwen2.5vl'
+        data.analysis_source === 'gemini-api'
+          ? 'Google Gemini AI'
+          : data.analysis_source === 'ollama-qwen2.5vl'
           ? 'Local AI • Qwen2.5-VL'
           : data.analysis_source || 'AI Analysis';
     }

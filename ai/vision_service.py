@@ -1,10 +1,9 @@
-import base64
 import json
-import requests
+import os
+from PIL import Image
 
+from ai.gemini_client import generate_multimodal
 
-OLLAMA_URL = "http://localhost:11434/api/generate"
-OLLAMA_MODEL = "qwen2.5vl:3b"
 
 PLANT_GATE_MIN_CONFIDENCE = 70
 
@@ -84,78 +83,34 @@ def _normalize_symptoms(value):
     return symptoms[:6]
 
 
-def _ollama_request(
-    image_base64,
-    prompt,
-    timeout=120,
-):
+def _gemini_request(pil_image, prompt):
     """
-    Send an image + prompt to the local Ollama model
+    Send an image + prompt to Gemini API
     and return a parsed JSON object.
     """
-
-    payload = {
-        "model": OLLAMA_MODEL,
-        "prompt": prompt,
-        "images": [image_base64],
-        "stream": False,
-        "format": "json",
-    }
-
     try:
-        response = requests.post(
-            OLLAMA_URL,
-            json=payload,
-            timeout=timeout,
+        raw_result = generate_multimodal(
+            [pil_image, prompt],
+            temperature=0.2,
+            response_json=True,
         )
 
-        response.raise_for_status()
-
-    except requests.exceptions.ConnectionError as error:
-        raise RuntimeError(
-            "Unable to connect to Ollama. "
-            "Make sure Ollama is running."
-        ) from error
-
-    except requests.exceptions.Timeout as error:
-        raise RuntimeError(
-            "Ollama took too long to respond."
-        ) from error
-
-    except requests.exceptions.RequestException as error:
-        raise RuntimeError(
-            f"Ollama request failed: {error}"
-        ) from error
-
-    try:
-        response_data = response.json()
-
-    except ValueError as error:
-        raise ValueError(
-            "Ollama returned an invalid HTTP response."
-        ) from error
-
-    raw_result = response_data.get("response")
-
-    if not raw_result:
-        raise ValueError(
-            "Ollama returned an empty response."
-        )
-
-    try:
         result = json.loads(raw_result)
+
+        if not isinstance(result, dict):
+            raise ValueError("Gemini API response was not a JSON object.")
+
+        return result
 
     except json.JSONDecodeError as error:
         raise ValueError(
-            f"Ollama returned invalid JSON: {raw_result}"
+            f"Gemini API returned invalid JSON: {error}"
         ) from error
 
-    if not isinstance(result, dict):
-        raise ValueError(
-            "Ollama response was not a JSON object."
-        )
-
-    return result
+    except Exception as error:
+        raise RuntimeError(
+            f"Gemini API request failed: {error}"
+        ) from error
 
 
 # ============================================================
@@ -163,7 +118,7 @@ def _ollama_request(
 # ============================================================
 
 def _validate_plant_image(
-    image_base64,
+    pil_image,
     supplied_crop_name=None,
 ):
     """
@@ -255,8 +210,8 @@ Rules:
 8. Do not include text outside the JSON.
 """
 
-    result = _ollama_request(
-        image_base64,
+    result = _gemini_request(
+        pil_image,
         prompt,
     )
 
@@ -283,13 +238,6 @@ Rules:
         "The uploaded image could not be verified as plant material.",
     )
 
-    # Conservative gate:
-    #
-    # The image must BOTH:
-    # 1. be classified as plant
-    # 2. meet the minimum confidence threshold
-    #
-    # Otherwise diagnosis is stopped.
     verified = (
         is_plant_image
         and
@@ -376,7 +324,7 @@ def _build_rejection_response(
 # ============================================================
 
 def _diagnose_verified_plant(
-    image_base64,
+    pil_image,
     supplied_crop_name=None,
 ):
     """
@@ -493,8 +441,8 @@ Rules:
 14. Do not include text outside the JSON.
 """
 
-    result = _ollama_request(
-        image_base64,
+    result = _gemini_request(
+        pil_image,
         prompt,
     )
 
@@ -556,10 +504,6 @@ Rules:
         result.get("chemical_treatment"),
         "",
     )
-
-    # --------------------------------------------------------
-    # Additional Python-side safeguards
-    # --------------------------------------------------------
 
     if confidence < 45:
         uncertain = True
@@ -637,7 +581,7 @@ def diagnose_leaf(
     crop_name=None,
 ):
     """
-    Two-stage plant disease analysis.
+    Two-stage plant disease analysis using Gemini API.
 
     Stage 1:
         Verify that the uploaded image actually
@@ -649,21 +593,12 @@ def diagnose_leaf(
     """
 
     # ----------------------------------------------------------
-    # Read image
+    # Read image using Pillow
     # ----------------------------------------------------------
 
     try:
-        with open(
-            image_path,
-            "rb",
-        ) as image_file:
-            image_base64 = (
-                base64.b64encode(
-                    image_file.read()
-                ).decode("utf-8")
-            )
-
-    except OSError as error:
+        pil_image = Image.open(image_path)
+    except Exception as error:
         raise ValueError(
             f"Unable to read image: {error}"
         ) from error
@@ -687,7 +622,7 @@ def diagnose_leaf(
     # ----------------------------------------------------------
 
     validation = _validate_plant_image(
-        image_base64,
+        pil_image,
         supplied_crop_name,
     )
 
@@ -707,7 +642,7 @@ def diagnose_leaf(
     # ----------------------------------------------------------
 
     diagnosis = _diagnose_verified_plant(
-        image_base64,
+        pil_image,
         supplied_crop_name,
     )
 

@@ -5,13 +5,23 @@ Supports production PostgreSQL databases with automatic fallback to SQLite for l
 import os
 from datetime import timedelta
 
+from dotenv import load_dotenv
+
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+
+# Load environment variables from .env file if available
+load_dotenv(os.path.join(BASE_DIR, '.env'))
+
 
 class Config:
     """Base application configuration."""
     SECRET_KEY = os.environ.get('SECRET_KEY', 'kisan-secret-production-grade-flask-session-key-2026')
     JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY', 'kisan-super-secure-production-jwt-key-2026-sha256-standard')
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(days=7)
+
+    # Gemini API Configuration
+    GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY') or os.environ.get('GOOGLE_API_KEY')
+    GEMINI_MODEL = os.environ.get('GEMINI_MODEL', 'gemini-2.5-flash')
     
     # Database Configuration: PostgreSQL default with fallback to local SQLite
     database_url = os.environ.get('DATABASE_URL')

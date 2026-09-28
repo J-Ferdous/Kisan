@@ -1,23 +1,11 @@
-import base64
 import json
 import os
 import subprocess
 import tempfile
+from PIL import Image
 
-import requests
+from ai.gemini_client import generate_multimodal, generate_text
 
-
-# ============================================================
-# CONFIGURATION
-# ============================================================
-
-OLLAMA_URL = "http://localhost:11434/api/generate"
-
-VISION_MODEL = "qwen2.5vl:3b"
-TEXT_MODEL = "qwen3:8b"
-
-VISION_TIMEOUT = 180
-TEXT_TIMEOUT = 180
 
 SUPPORTED_LANGUAGES = {
     "English": "English",
@@ -32,7 +20,7 @@ ALLOWED_VIDEO_EXTENSIONS = {
     ".mkv",
 }
 
-# Keep this small because video analysis runs locally.
+# Number of representative frames to sample from video
 MAX_FRAMES = 4
 
 
@@ -41,10 +29,7 @@ MAX_FRAMES = 4
 # ============================================================
 
 def _get_video_duration(video_path):
-    """
-    Get video duration in seconds using FFprobe.
-    """
-
+    """Get video duration in seconds using FFprobe."""
     command = [
         "ffprobe",
         "-v",
@@ -66,15 +51,10 @@ def _get_video_duration(video_path):
         )
 
         data = json.loads(result.stdout)
-
-        duration = float(
-            data["format"]["duration"]
-        )
+        duration = float(data["format"]["duration"])
 
         if duration <= 0:
-            raise ValueError(
-                "Video duration is invalid."
-            )
+            raise ValueError("Video duration is invalid.")
 
         return duration
 
@@ -83,21 +63,10 @@ def _get_video_duration(video_path):
             "FFprobe was not found. "
             "Make sure FFmpeg is installed and available in PATH."
         ) from exc
-
     except subprocess.TimeoutExpired as exc:
-        raise RuntimeError(
-            "FFprobe took too long to inspect the video."
-        ) from exc
-
-    except (
-        subprocess.CalledProcessError,
-        KeyError,
-        ValueError,
-        json.JSONDecodeError,
-    ) as exc:
-        raise ValueError(
-            "Unable to determine video duration."
-        ) from exc
+        raise RuntimeError("FFprobe took too long to inspect the video.") from exc
+    except (subprocess.CalledProcessError, KeyError, ValueError, json.JSONDecodeError) as exc:
+        raise ValueError("Unable to determine video duration.") from exc
 
 
 # ============================================================
@@ -111,26 +80,15 @@ def _choose_timestamps(duration):
     Exact beginning/end frames are avoided because they may
     contain black frames, transitions, or title screens.
     """
-
     if duration <= 2:
         return [duration / 2]
 
-    frame_count = min(
-        MAX_FRAMES,
-        max(1, int(duration))
-    )
-
+    frame_count = min(MAX_FRAMES, max(1, int(duration)))
     timestamps = []
 
     for index in range(frame_count):
-        fraction = (
-            (index + 1)
-            / (frame_count + 1)
-        )
-
-        timestamp = duration * fraction
-
-        timestamps.append(timestamp)
+        fraction = (index + 1) / (frame_count + 1)
+        timestamps.append(duration * fraction)
 
     return timestamps
 
@@ -139,15 +97,8 @@ def _choose_timestamps(duration):
 # FRAME EXTRACTION
 # ============================================================
 
-def _extract_frame(
-    video_path,
-    timestamp,
-    output_path
-):
-    """
-    Extract one representative frame using FFmpeg.
-    """
-
+def _extract_frame(video_path, timestamp, output_path):
+    """Extract one representative frame using FFmpeg."""
     command = [
         "ffmpeg",
         "-y",
@@ -173,145 +124,26 @@ def _extract_frame(
         )
 
         if result.returncode != 0:
-            error_message = (
-                result.stderr.strip()
-                or "Unknown FFmpeg error."
-            )
+            error_message = result.stderr.strip() or "Unknown FFmpeg error."
+            raise RuntimeError(f"FFmpeg could not extract a video frame. {error_message}")
 
-            raise RuntimeError(
-                "FFmpeg could not extract a video frame. "
-                f"{error_message}"
-            )
-
-        if not os.path.isfile(output_path):
-            raise RuntimeError(
-                "FFmpeg did not create the expected frame."
-            )
-
-        if os.path.getsize(output_path) == 0:
-            raise RuntimeError(
-                "FFmpeg created an empty frame."
-            )
+        if not os.path.isfile(output_path) or os.path.getsize(output_path) == 0:
+            raise RuntimeError("FFmpeg created an empty or missing frame.")
 
     except FileNotFoundError as exc:
         raise RuntimeError(
-            "FFmpeg was not found. "
-            "Make sure FFmpeg is installed and available in PATH."
+            "FFmpeg was not found. Make sure FFmpeg is installed and available in PATH."
         ) from exc
-
     except subprocess.TimeoutExpired as exc:
-        raise RuntimeError(
-            "FFmpeg took too long to process the video."
-        ) from exc
-
-
-# ============================================================
-# IMAGE ENCODING
-# ============================================================
-
-def _encode_image(image_path):
-    """
-    Convert an extracted frame to Base64 for Ollama.
-    """
-
-    try:
-        with open(
-            image_path,
-            "rb"
-        ) as image_file:
-
-            return base64.b64encode(
-                image_file.read()
-            ).decode("utf-8")
-
-    except OSError as exc:
-        raise ValueError(
-            f"Unable to read extracted video frame: {exc}"
-        ) from exc
-
-
-# ============================================================
-# OLLAMA REQUEST HELPER
-# ============================================================
-
-def _send_ollama_request(
-    payload,
-    timeout
-):
-    """
-    Send a request to Ollama and return the generated text.
-
-    Includes the Ollama response body when an HTTP error occurs,
-    which makes debugging easier.
-    """
-
-    try:
-        response = requests.post(
-            OLLAMA_URL,
-            json=payload,
-            timeout=timeout
-        )
-
-    except requests.exceptions.ConnectionError as exc:
-        raise RuntimeError(
-            "Could not connect to Ollama. "
-            "Make sure Ollama is running."
-        ) from exc
-
-    except requests.exceptions.Timeout as exc:
-        raise RuntimeError(
-            "Ollama took too long to respond."
-        ) from exc
-
-    except requests.exceptions.RequestException as exc:
-        raise RuntimeError(
-            f"Ollama request failed: {exc}"
-        ) from exc
-
-    if not response.ok:
-        error_text = response.text.strip()
-
-        raise RuntimeError(
-            f"Ollama HTTP {response.status_code}: "
-            f"{error_text}"
-        )
-
-    try:
-        data = response.json()
-
-    except ValueError as exc:
-        raise RuntimeError(
-            "Ollama returned an invalid HTTP response."
-        ) from exc
-
-    answer = str(
-        data.get("response", "")
-    ).strip()
-
-    if not answer:
-        raise RuntimeError(
-            "Ollama returned an empty response."
-        )
-
-    return answer
+        raise RuntimeError("FFmpeg took too long to process the video.") from exc
 
 
 # ============================================================
 # SINGLE FRAME ANALYSIS
 # ============================================================
 
-def _analyze_frame(
-    frame_base64,
-    frame_number,
-    timestamp
-):
-    """
-    Analyze ONE extracted frame with qwen2.5vl:3b.
-
-    Each frame is sent independently to avoid problems with
-    multi-image requests.
-    """
-
+def _analyze_frame(frame_path, frame_number, timestamp):
+    """Analyze ONE extracted frame using Gemini API."""
     prompt = f"""
 You are analyzing one representative frame extracted from a video.
 
@@ -342,45 +174,24 @@ RULES:
 
 Return only the frame observation.
 """
-
-    payload = {
-        "model": VISION_MODEL,
-        "prompt": prompt,
-        "images": [frame_base64],
-        "stream": False,
-        "options": {
-            "temperature": 0.1
-        }
-    }
-
-    return _send_ollama_request(
-        payload,
-        VISION_TIMEOUT
-    )
+    try:
+        pil_image = Image.open(frame_path)
+        return generate_multimodal([pil_image, prompt], temperature=0.1)
+    except Exception as exc:
+        raise RuntimeError(f"Failed to analyze frame {frame_number}: {exc}") from exc
 
 
 # ============================================================
 # FINAL VIDEO INTERPRETATION
 # ============================================================
 
-def _generate_final_answer(
-    observations,
-    message,
-    language,
-    duration
-):
+def _generate_final_answer(observations, message, language, duration):
     """
-    Give the chronological frame observations to qwen3:8b
+    Give the chronological frame observations to Gemini API
     and generate the final answer to the user's question.
     """
-
-    response_language = (
-        SUPPORTED_LANGUAGES[language]
-    )
-
-    observation_text = "\n\n".join(
-        observations
-    )
+    response_language = SUPPORTED_LANGUAGES[language]
+    observation_text = "\n\n".join(observations)
 
     prompt = f"""
 You are KISAAN AI Assistant, a multimodal agricultural assistant
@@ -451,182 +262,62 @@ USER'S QUESTION:
 
 Answer only the user's question in {response_language}.
 """
-
-    payload = {
-        "model": TEXT_MODEL,
-        "prompt": prompt,
-        "stream": False,
-        "options": {
-            "temperature": 0.2
-        }
-    }
-
-    return _send_ollama_request(
-        payload,
-        TEXT_TIMEOUT
-    )
+    try:
+        return generate_text(prompt, temperature=0.2)
+    except Exception as exc:
+        raise RuntimeError(f"Failed to generate final video analysis answer: {exc}") from exc
 
 
 # ============================================================
 # PUBLIC VIDEO FUNCTION
 # ============================================================
 
-def generate_video_response(
-    video_path,
-    message="",
-    language="English"
-):
+def generate_video_response(video_path, message="", language="English"):
     """
-    Analyze a video using representative frames.
-
-    Pipeline:
-
-    Video
-        ↓
-    FFprobe determines duration
-        ↓
-    FFmpeg extracts representative frames
-        ↓
-    qwen2.5vl:3b analyzes each frame separately
-        ↓
-    qwen3:8b combines the observations
-        ↓
-    Final answer in English / Hindi / Bengali
-
-    Version 1 analyzes VISUAL content only.
-    Audio is not transcribed or analyzed yet.
+    Analyze a video using representative frames via Gemini API.
     """
+    if not video_path or not os.path.isfile(video_path):
+        raise ValueError("Video file was not found.")
 
-    # --------------------------------------------------------
-    # Validate video
-    # --------------------------------------------------------
-
-    if not video_path:
-        raise ValueError(
-            "Video path is required."
-        )
-
-    if not os.path.isfile(video_path):
-        raise ValueError(
-            "Video file was not found."
-        )
-
-    extension = os.path.splitext(
-        video_path
-    )[1].lower()
-
+    extension = os.path.splitext(video_path)[1].lower()
     if extension not in ALLOWED_VIDEO_EXTENSIONS:
-        raise ValueError(
-            "Unsupported video format. "
-            "Please use MP4, MOV, WEBM, or MKV."
-        )
-
-    # --------------------------------------------------------
-    # Validate language
-    # --------------------------------------------------------
+        raise ValueError("Unsupported video format. Please use MP4, MOV, WEBM, or MKV.")
 
     if language not in SUPPORTED_LANGUAGES:
         language = "English"
 
-    # --------------------------------------------------------
-    # Prepare user question
-    # --------------------------------------------------------
-
-    message = str(
-        message or ""
-    ).strip()
-
+    message = str(message or "").strip()
     if not message:
-        message = (
-            "Describe what happens in this video."
-        )
+        message = "Describe what happens in this video."
 
-    # --------------------------------------------------------
-    # Determine video duration
-    # --------------------------------------------------------
-
-    duration = _get_video_duration(
-        video_path
-    )
-
-    # --------------------------------------------------------
-    # Choose representative timestamps
-    # --------------------------------------------------------
-
-    timestamps = _choose_timestamps(
-        duration
-    )
-
+    duration = _get_video_duration(video_path)
+    timestamps = _choose_timestamps(duration)
     observations = []
 
-    # --------------------------------------------------------
-    # Extract and analyze each frame
-    # --------------------------------------------------------
-
     with tempfile.TemporaryDirectory() as temp_dir:
-
-        for index, timestamp in enumerate(
-            timestamps
-        ):
+        for index, timestamp in enumerate(timestamps):
             frame_number = index + 1
+            frame_path = os.path.join(temp_dir, f"frame_{frame_number}.jpg")
 
-            frame_path = os.path.join(
-                temp_dir,
-                f"frame_{frame_number}.jpg"
-            )
-
-            # Extract frame
-            _extract_frame(
-                video_path,
-                timestamp,
-                frame_path
-            )
-
-            # Convert frame to Base64
-            frame_base64 = _encode_image(
-                frame_path
-            )
+            _extract_frame(video_path, timestamp, frame_path)
 
             print(
-                f"[AI Video] Analyzing frame "
-                f"{frame_number}/{len(timestamps)} "
-                f"at {timestamp:.1f}s..."
+                f"[AI Video] Analyzing frame {frame_number}/{len(timestamps)} at {timestamp:.1f}s via Gemini API..."
             )
 
-            # Analyze one image only
-            frame_analysis = _analyze_frame(
-                frame_base64,
-                frame_number,
-                timestamp
-            )
+            frame_analysis = _analyze_frame(frame_path, frame_number, timestamp)
 
             observations.append(
-                (
-                    f"Frame {frame_number} "
-                    f"(approximately {timestamp:.1f} seconds):\n"
-                    f"{frame_analysis}"
-                )
+                f"Frame {frame_number} (approximately {timestamp:.1f} seconds):\n{frame_analysis}"
             )
 
     if not observations:
-        raise RuntimeError(
-            "No video frames could be analyzed."
-        )
+        raise RuntimeError("No video frames could be analyzed.")
 
-    # --------------------------------------------------------
-    # Generate final answer
-    # --------------------------------------------------------
-
-    print(
-        "[AI Video] Combining frame observations "
-        f"using {TEXT_MODEL}..."
-    )
-
-    final_answer = _generate_final_answer(
+    print("[AI Video] Combining frame observations via Gemini API...")
+    return _generate_final_answer(
         observations=observations,
         message=message,
         language=language,
-        duration=duration
+        duration=duration,
     )
-
-    return final_answer
