@@ -1,6 +1,7 @@
 /**
  * Kisan Web Project - Farmer Community & Directory Module
- * Powers the farmer social feed, post creation with attachments, and public verified farmer directory.
+ * Powers the farmer social feed, post creation with attachments, public verified farmer directory,
+ * and farmer profile views & progress uploads.
  */
 
 (function () {
@@ -57,12 +58,12 @@
           <div class="tilt-glare"></div>
           <div class="tilt-content">
             <div class="flex items-center justify-between mb-4">
-              <div class="flex items-center gap-3">
+              <div class="flex items-center gap-3 cursor-pointer" onclick="window.openFarmerProfile(${post.user_id || 1})">
                 <div class="w-10 h-10 rounded-full bg-emerald-800/50 border border-emerald-500/30 flex items-center justify-center font-bold text-emerald-300">
                   ${post.author_name ? post.author_name.charAt(0) : 'F'}
                 </div>
                 <div>
-                  <h4 class="text-sm font-semibold text-white">${post.author_name}</h4>
+                  <h4 class="text-sm font-semibold text-white hover:text-emerald-400 transition-colors">${post.author_name}</h4>
                   <p class="text-xs text-slate-400 flex items-center gap-1">
                     <svg class="w-3 h-3 text-emerald-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/></svg>
                     ${post.author_location}
@@ -162,7 +163,8 @@
 
       farmers.forEach((farmer) => {
         const card = document.createElement('div');
-        card.className = 'glass-card tilt-card rounded-2xl p-5 flex flex-col justify-between border border-emerald-500/15';
+        card.className = 'glass-card tilt-card rounded-2xl p-5 flex flex-col justify-between border border-emerald-500/15 cursor-pointer hover:border-emerald-400/50 transition-all';
+        card.setAttribute('onclick', `window.openFarmerProfile(${farmer.id})`);
 
         card.innerHTML = `
           <div class="tilt-glare"></div>
@@ -201,8 +203,8 @@
             </div>
 
             <div class="flex items-center gap-2 pt-2 border-t border-white/10">
-              <button onclick="window.contactFarmer('${farmer.name}', '${farmer.phone}')" class="w-full py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs rounded-xl transition-all shadow-md">
-                Contact Producer
+              <button onclick="event.stopPropagation(); window.openFarmerProfile(${farmer.id});" class="w-full py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs rounded-xl transition-all shadow-md">
+                View Profile & Field Updates
               </button>
             </div>
           </div>
@@ -216,11 +218,100 @@
     }
   }
 
-  window.contactFarmer = function (name, phone) {
-    if (phone) {
-      alert(`Contact ${name} at phone: ${phone}\n(In production, opens direct Kisan dialer/messaging)`);
-    } else {
-      alert(`Connecting to ${name} via Kisan Secure Message Portal.`);
+  // --- Farmer Profile Modal Logic ---
+  window.openFarmerProfile = async function (farmerId) {
+    const modal = document.getElementById('farmer-profile-modal');
+    const postsContainer = document.getElementById('profile-posts-container');
+    if (!modal || !postsContainer) return;
+
+    postsContainer.innerHTML = `
+      <div class="text-center py-8 text-slate-400">
+        <svg class="animate-spin h-6 w-6 text-emerald-400 mx-auto mb-2" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <span>Loading farmer profile & field progress logs...</span>
+      </div>
+    `;
+
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+
+    try {
+      const res = await fetch(`/api/community/farmers/${farmerId}/profile`);
+      if (!res.ok) throw new Error('Profile not found');
+      const data = await res.json();
+
+      document.getElementById('profile-avatar').src = data.avatar_url;
+      document.getElementById('profile-name').textContent = data.name;
+      document.getElementById('profile-location-text').textContent = `${data.district ? data.district + ', ' : ''}${data.state || 'India'}`;
+      document.getElementById('profile-crop-text').textContent = data.primary_crops && data.primary_crops.length ? data.primary_crops.join(', ') : 'Multi-Crop';
+      document.getElementById('profile-bio-text').textContent = `"${data.bio || 'Progressive Kisan sharing field updates.'}"`;
+
+      postsContainer.innerHTML = '';
+      if (!data.posts || data.posts.length === 0) {
+        postsContainer.innerHTML = `
+          <div class="text-center py-8 text-slate-400 glass-card rounded-2xl p-6">
+            <p class="text-sm font-semibold">No field progress updates posted yet.</p>
+            <p class="text-xs text-slate-500 mt-1">This farmer hasn't uploaded field photos or videos.</p>
+          </div>
+        `;
+        return;
+      }
+
+      data.posts.forEach((post) => {
+        const postCard = document.createElement('div');
+        postCard.className = 'glass-card rounded-2xl p-4 border border-white/10 space-y-3';
+
+        postCard.innerHTML = `
+          <div class="flex items-center justify-between text-[11px] text-slate-400">
+            <span class="font-mono text-emerald-400">${post.created_at || 'Recent Update'}</span>
+          </div>
+
+          ${post.text ? `<p class="text-xs text-slate-200 leading-relaxed">${post.text}</p>` : ''}
+
+          ${
+            post.media_url
+              ? post.media_type === 'video'
+                ? `<video src="${post.media_url}" controls class="w-full max-h-64 rounded-xl object-cover border border-white/10 bg-black"></video>`
+                : `<img src="${post.media_url}" alt="Field progress specimen" class="w-full max-h-64 rounded-xl object-cover border border-white/10 bg-black" />`
+              : ''
+          }
+        `;
+        postsContainer.appendChild(postCard);
+      });
+
+      if (window.lucide) window.lucide.createIcons();
+    } catch (err) {
+      postsContainer.innerHTML = `
+        <div class="text-center py-6 text-red-400 text-xs">
+          Unable to load farmer profile details.
+        </div>
+      `;
+    }
+  };
+
+  window.closeFarmerProfileModal = function () {
+    const modal = document.getElementById('farmer-profile-modal');
+    if (modal) {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+  };
+
+  window.openUploadProgressModal = function () {
+    const modal = document.getElementById('upload-progress-modal');
+    if (modal) {
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+  };
+
+  window.closeUploadProgressModal = function () {
+    const modal = document.getElementById('upload-progress-modal');
+    if (modal) {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
     }
   };
 
@@ -288,6 +379,52 @@
           if (submitBtn) {
             submitBtn.disabled = false;
             submitBtn.textContent = 'Post Update';
+          }
+        }
+      });
+    }
+
+    // Upload Field Progress Form
+    const uploadProgressForm = document.getElementById('upload-progress-form');
+    if (uploadProgressForm) {
+      uploadProgressForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const textInput = document.getElementById('progress-text-input').value;
+        const mediaInput = document.getElementById('progress-media-input').files[0];
+        const submitBtn = document.getElementById('btn-submit-progress');
+
+        const formData = new FormData();
+        formData.append('text_content', textInput);
+        if (mediaInput) {
+          formData.append('media_file', mediaInput);
+        }
+
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = `<span>Uploading...</span>`;
+        }
+
+        try {
+          const res = await fetch('/api/community/farmers/posts/create', {
+            method: 'POST',
+            body: formData,
+          });
+          const data = await res.json();
+
+          if (res.ok) {
+            alert('Field progress update published successfully!');
+            window.closeUploadProgressModal();
+            uploadProgressForm.reset();
+          } else {
+            alert(data.error || 'Failed to upload field update.');
+          }
+        } catch (err) {
+          alert('Server connection error. Please try again.');
+        } finally {
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = `<i data-lucide="send" class="w-4 h-4"></i><span>Publish Field Progress</span>`;
+            if (window.lucide) window.lucide.createIcons();
           }
         }
       });

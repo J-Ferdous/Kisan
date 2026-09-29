@@ -54,8 +54,53 @@
   <!-- Three.js CDN -->
   <script src="/static/js/three_hero.js"></script>
 
-  <!-- Custom Styles (Glassmorphism, 3D Perspective, Glowing Badges) -->
+  <!-- Custom Styles -->
   <link rel="stylesheet" href="/static/css/custom.css" />
+
+  <!-- GOOGLE TRANSLATE RELIABLE STYLING -->
+  <style>
+    #google_translate_element {
+      display: inline-block !important;
+      position: relative;
+    }
+
+    .goog-te-combo {
+      background-color: #0f172a !important;
+      color: #34d399 !important;
+      border: 1px solid rgba(255, 255, 255, 0.2) !important;
+      border-radius: 0.75rem !important;
+      padding: 0.4rem 0.8rem !important;
+      font-size: 0.75rem !important;
+      font-weight: 600 !important;
+      outline: none !important;
+      cursor: pointer !important;
+      appearance: auto !important;
+      -webkit-appearance: auto !important;
+    }
+
+    .goog-te-combo:hover {
+      border-color: #10b981 !important;
+      background-color: #1e293b !important;
+    }
+
+    .goog-te-gadget {
+      font-size: 0px !important;
+      color: transparent !important;
+    }
+
+    .goog-te-gadget .goog-te-combo {
+      font-size: 0.75rem !important;
+    }
+
+    .goog-te-gadget img,
+    .goog-te-gadget > span {
+      display: none !important;
+    }
+
+    body {
+      top: 0px !important;
+    }
+  </style>
 </head>
 
 <body class="bg-[#08120e] text-slate-100 selection:bg-emerald-500 selection:text-black">
@@ -64,126 +109,142 @@
   <div class="fixed top-0 left-1/4 w-96 h-96 bg-emerald-600/10 rounded-full blur-3xl pointer-events-none z-0"></div>
   <div class="fixed bottom-0 right-1/4 w-96 h-96 bg-amber-600/10 rounded-full blur-3xl pointer-events-none z-0"></div>
 
-  <!-- ============================================================== -->
-  <!-- STICKY GLASS NAVBAR -->
-  <!-- ============================================================== -->
+  <!-- GLASS NAVBAR -->
   <header class="sticky top-0 z-40 glass-nav border-b border-white/10 backdrop-blur-xl">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-      <!-- Logo & Brand -->
-      <a href="#hero" class="flex items-center gap-3 group">
-        <div
-          class="w-11 h-11 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 p-0.5 shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition-transform">
-          <div class="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
-            <span class="text-2xl">🌾</span>
+      
+      <!-- LEFT SECTION -->
+      <div class="flex items-center gap-4">
+        <button onclick="toggleUserDrawer()"
+          class="p-2.5 rounded-xl bg-slate-900/80 border border-white/10 hover:border-emerald-500/40 text-slate-200 hover:text-white transition-all flex items-center gap-2"
+          aria-label="Open Feature Menu">
+          <i data-lucide="menu" class="w-5 h-5 text-emerald-400"></i>
+        </button>
+
+        <a href="#hero" class="flex items-center gap-3 group">
+          <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 p-0.5 shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition-transform">
+            <div class="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
+              <span class="text-2xl">🌾</span>
+            </div>
           </div>
-        </div>
-        <div>
-          <div class="flex items-center gap-2">
+          <div>
             <span class="text-xl font-extrabold tracking-tight text-white font-['Plus_Jakarta_Sans']">
               KISAAN
             </span>
-            <span
-              class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 rounded-full">
-              v2.0 PROD
-            </span>
+            <p class="text-[10px] text-slate-400 uppercase tracking-wider">
+              Smart Agro-Tech Platform
+            </p>
           </div>
-          <p class="text-[10px] text-slate-400 uppercase tracking-wider">
-            Smart Agro-Tech Platform
-          </p>
-        </div>
-      </a>
+        </a>
+      </div>
 
-      <!-- Desktop Navigation Menu -->
-      <nav class="hidden lg:flex items-center gap-6 text-xs font-semibold text-slate-300">
-        <a href="#weather" class="hover:text-emerald-400 transition-colors flex items-center gap-1.5">
-          <i data-lucide="cloud-sun" class="w-3.5 h-3.5 text-cyan-400"></i>
-          Weather
-        </a>
-        <a href="#recommendations" class="hover:text-emerald-400 transition-colors flex items-center gap-1.5">
-          <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-400"></i> AI
-          Crop Advice
-        </a>
-        <a href="#ai-assistant" class="hover:text-violet-400 transition-colors flex items-center gap-1.5">
-          <i data-lucide="bot" class="w-3.5 h-3.5 text-violet-400"></i>
-          AI Assistant
-        </a>
-        <a href="#crops" class="hover:text-emerald-400 transition-colors flex items-center gap-1.5">
-          <i data-lucide="calendar" class="w-3.5 h-3.5 text-emerald-400"></i>
-          Crop Cycles
+      <!-- MIDDLE SECTION -->
+      <nav class="hidden md:flex items-center gap-8 text-xs font-semibold text-slate-200">
+        <a href="#hero" class="hover:text-emerald-400 transition-colors flex items-center gap-1.5">
+          <i data-lucide="home" class="w-3.5 h-3.5 text-emerald-400"></i> Home
         </a>
         <a href="#ai-diagnostics" class="hover:text-emerald-400 transition-colors flex items-center gap-1.5">
-          <i data-lucide="scan" class="w-3.5 h-3.5 text-teal-400"></i> Leaf
-          Doctor
+          <i data-lucide="scan-line" class="w-3.5 h-3.5 text-teal-400"></i> Scan Crop
         </a>
-        <a href="#machinery" class="hover:text-emerald-400 transition-colors flex items-center gap-1.5">
-          <i data-lucide="cog" class="w-3.5 h-3.5 text-amber-400"></i> 3D
-          Tools
+        <a href="#ai-diagnostics" class="hover:text-emerald-400 transition-colors flex items-center gap-1.5">
+          <i data-lucide="stethoscope" class="w-3.5 h-3.5 text-cyan-400"></i> Leaf Doctor
         </a>
-        <a href="#schemes" class="hover:text-emerald-400 transition-colors flex items-center gap-1.5">
-          <i data-lucide="landmark" class="w-3.5 h-3.5 text-emerald-400"></i>
-          Govt Loans
-        </a>
-        <a href="#community" class="hover:text-emerald-400 transition-colors flex items-center gap-1.5">
-          <i data-lucide="users" class="w-3.5 h-3.5 text-cyan-400"></i>
-          Community
+        <a href="#ai-assistant" class="hover:text-violet-400 transition-colors flex items-center gap-1.5">
+          <i data-lucide="bot" class="w-3.5 h-3.5 text-violet-400"></i> AI Assistant
         </a>
       </nav>
 
-      <!-- Right Header Actions (Micro Weather Badge & Auth) -->
+      <!-- RIGHT SECTION -->
       <div class="flex items-center gap-3">
-        <!-- Live Weather Capsule -->
+        <!-- Weather Badge -->
         <a href="#weather"
           class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/80 border border-white/10 hover:border-emerald-500/40 transition-all text-xs">
           <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-          <span id="nav-weather-temp" class="font-bold text-white">27°C</span>
+          <span id="nav-weather-temp" class="font-bold text-white">28°C</span>
           <span class="text-slate-400">|</span>
-          <span id="nav-weather-cond" class="text-slate-300 truncate max-w-[90px]">Clear</span>
-          <span class="text-[10px] text-emerald-400 hidden xl:inline" id="nav-weather-loc">Delhi</span>
+          <span id="nav-weather-loc" class="text-slate-300 font-medium">Kolkata, India</span>
         </a>
 
-        <!-- Auth Button -->
+        <!-- Google Translate Widget Container -->
+        <div id="google_translate_element"></div>
+
+        <!-- Auth CTA Button -->
         <button id="nav-auth-btn" onclick="window.openAuthModal()"
           class="px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-semibold text-xs rounded-xl shadow-lg shadow-emerald-950 transition-all flex items-center gap-2">
           <i data-lucide="user" class="w-3.5 h-3.5"></i>
-          <span>Farmer Sign In</span>
+          <span>Farmer Sign In / Register</span>
         </button>
       </div>
     </div>
   </header>
 
-  <!-- ============================================================== -->
-  <!-- 1. DYNAMIC 3D HERO SECTION (Three.js WebGL Canvas) -->
-  <!-- ============================================================== -->
-  <section id="hero" class="relative min-h-[90vh] flex items-center overflow-hidden z-10">
-    <!-- WebGL Three.js Canvas Container -->
-    <!-- Hero Video Background -->
-    <div class="hero-video-container absolute inset-0 w-full h-full z-0 overflow-hidden">
+  <!-- LEFT USER DRAWER MENU -->
+  <aside id="left-user-drawer"
+    class="fixed inset-y-0 left-0 w-80 bg-slate-950/95 border-r border-white/10 backdrop-blur-2xl z-50 transform -translate-x-full transition-transform duration-300 flex flex-col justify-between shadow-2xl">
+    <div>
+      <div class="p-6 border-b border-white/10 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">🌾</span>
+          <h2 class="text-base font-bold text-white font-['Plus_Jakarta_Sans']">KISAAN Features</h2>
+        </div>
+        <button onclick="toggleUserDrawer()"
+          class="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-all">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
 
-      <video id="hero-background-video" class="hero-background-video" autoplay muted loop playsinline preload="auto">
-        <source src="/static/uploads/kisan-hero-small.mp4" type="video/mp4">
-
-        Your browser does not support the video tag.
-      </video>
-
-      <!-- Dark overlay -->
-      <div class="hero-video-overlay"></div>
-
-      <!-- Green cinematic gradient -->
-      <div class="hero-video-gradient"></div>
-
+      <div class="p-4 space-y-1.5 font-medium text-xs text-slate-300">
+        <a href="#weather" onclick="toggleUserDrawer()" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-emerald-500/10 hover:text-emerald-400 transition-all">
+          <i data-lucide="cloud-sun" class="w-4 h-4 text-cyan-400"></i> Weather
+        </a>
+        <a href="#recommendations" onclick="toggleUserDrawer()" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-emerald-500/10 hover:text-emerald-400 transition-all">
+          <i data-lucide="sparkles" class="w-4 h-4 text-amber-400"></i> AI Crop Advice
+        </a>
+        <a href="#crops" onclick="toggleUserDrawer()" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-emerald-500/10 hover:text-emerald-400 transition-all">
+          <i data-lucide="calendar" class="w-4 h-4 text-emerald-400"></i> Crop Cycles
+        </a>
+        <a href="#machinery" onclick="toggleUserDrawer()" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-emerald-500/10 hover:text-emerald-400 transition-all">
+          <i data-lucide="box" class="w-4 h-4 text-amber-400"></i> 3D Tools
+        </a>
+        <a href="#schemes" onclick="toggleUserDrawer()" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-emerald-500/10 hover:text-emerald-400 transition-all">
+          <i data-lucide="landmark" class="w-4 h-4 text-emerald-400"></i> Govt Loans
+        </a>
+        <a href="#community" onclick="toggleUserDrawer()" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-emerald-500/10 hover:text-emerald-400 transition-all">
+          <i data-lucide="users" class="w-4 h-4 text-cyan-400"></i> Farmer Community
+        </a>
+      </div>
     </div>
 
-    <!-- Foreground Content Overlay -->
-    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 w-full pointer-events-none">
-      <div class="max-w-2xl pointer-events-auto">
-        <!-- Live Satellite Telemetry Badge -->
+    <div class="p-4 border-t border-white/10">
+      <button onclick="window.openAuthModal()" class="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 text-xs font-semibold transition-all">
+        <i data-lucide="log-out" class="w-4 h-4"></i> Logout
+      </button>
+    </div>
+  </aside>
+
+  <!-- DRAWER OVERLAY -->
+  <div id="drawer-overlay" onclick="toggleUserDrawer()" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 hidden"></div>
+
+  <!-- HERO SECTION -->
+  <section id="hero" class="relative min-h-[90vh] flex items-center overflow-hidden z-10">
+    <div class="hero-video-container absolute inset-0 w-full h-full z-0 overflow-hidden">
+      <video id="hero-background-video" class="hero-background-video" autoplay muted loop playsinline preload="auto">
+        <source src="/static/uploads/kisan-hero-small.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      <div class="hero-video-overlay"></div>
+      <div class="hero-video-gradient"></div>
+    </div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 w-full">
+      <div class="max-w-2xl">
         <div
-          class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-950/60 border border-emerald-500/30 text-emerald-300 text-xs font-semibold mb-6 backdrop-blur shadow-lg">
-          <span class="relative flex h-2 w-2">
+          class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-950/70 border border-emerald-500/40 text-emerald-300 text-xs font-semibold mb-6 backdrop-blur shadow-xl">
+          <span class="relative flex h-2.5 w-2.5">
             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
           </span>
-          <span>Next-Generation 3D Agricultural Operating System</span>
+          <span>Next-Gen Smart Agriculture Engine</span>
         </div>
 
         <h1
@@ -195,66 +256,47 @@
         </h1>
 
         <p class="text-base sm:text-lg text-slate-300 font-normal leading-relaxed mb-8 max-w-xl">
-          Integrate real-time satellite meteorology, AI-driven plant disease
-          diagnostics, seasonal crop lifecycle roadmaps, and direct government
-          subsidy access in one immersive WebGL experience.
+          Integrate real-time satellite meteorology, AI-driven plant disease diagnostics, seasonal crop lifecycle roadmaps, and direct government subsidy access in one immersive WebGL experience.
         </p>
 
-        <!-- CTA Buttons -->
         <div class="flex flex-wrap items-center gap-4 mb-10">
           <a href="#ai-diagnostics"
-            class="px-6 py-3.5 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-bold text-sm rounded-xl shadow-xl shadow-emerald-500/25 transition-all flex items-center gap-2 transform hover:-translate-y-0.5">
+            class="px-8 py-3.5 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-extrabold text-sm rounded-xl shadow-xl shadow-emerald-500/25 transition-all flex items-center gap-2 transform hover:-translate-y-0.5">
             <i data-lucide="scan-line" class="w-4 h-4"></i>
             <span>Scan Crop Disease</span>
           </a>
-          <a href="#recommendations"
-            class="px-6 py-3.5 glass-card hover:border-emerald-400/50 text-white font-semibold text-sm rounded-xl transition-all flex items-center gap-2">
-            <i data-lucide="compass" class="w-4 h-4 text-emerald-400"></i>
-            <span>Geo-Tailored Advice</span>
-          </a>
-          <a href="#crops"
-            class="px-6 py-3.5 bg-white/5 hover:bg-white/10 text-slate-200 font-semibold text-sm rounded-xl transition-all flex items-center gap-2">
-            <i data-lucide="book-open" class="w-4 h-4 text-amber-400"></i>
-            <span>Farming Guides</span>
+          <a href="#ai-assistant"
+            class="px-8 py-3.5 glass-card hover:border-emerald-400/50 text-white font-bold text-sm rounded-xl transition-all flex items-center gap-2 transform hover:-translate-y-0.5">
+            <i data-lucide="bot" class="w-4 h-4 text-violet-400"></i>
+            <span>Ask AI Assistant</span>
           </a>
         </div>
 
-        <!-- Floating Glassmorphic Quick Metric Badges -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-xl">
-          <div class="glass-card p-3 rounded-xl border border-white/10 text-center">
-            <span class="text-lg font-black text-emerald-400 block font-mono">10,000+</span>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-2xl pt-6 border-t border-white/10">
+          <div class="glass-card p-3.5 rounded-xl border border-white/10 text-center">
+            <span class="text-2xl font-black text-emerald-400 block font-mono">50,000+</span>
             <span class="text-[11px] text-slate-400 uppercase font-semibold">Active Farmers</span>
           </div>
-          <div class="glass-card p-3 rounded-xl border border-white/10 text-center">
-            <span class="text-lg font-black text-teal-400 block font-mono">98.2%</span>
-            <span class="text-[11px] text-slate-400 uppercase font-semibold">AI Accuracy</span>
+          <div class="glass-card p-3.5 rounded-xl border border-white/10 text-center">
+            <span class="text-2xl font-black text-teal-400 block font-mono">98.4%</span>
+            <span class="text-[11px] text-slate-400 uppercase font-semibold">Diagnosis Accuracy</span>
           </div>
-          <div class="glass-card p-3 rounded-xl border border-white/10 text-center">
-            <span class="text-lg font-black text-amber-400 block font-mono">7-Day</span>
-            <span class="text-[11px] text-slate-400 uppercase font-semibold">Live Forecast</span>
+          <div class="glass-card p-3.5 rounded-xl border border-white/10 text-center">
+            <span class="text-2xl font-black text-amber-400 block font-mono">120+</span>
+            <span class="text-[11px] text-slate-400 uppercase font-semibold">Crops Supported</span>
           </div>
-          <div class="glass-card p-3 rounded-xl border border-white/10 text-center">
-            <span class="text-lg font-black text-cyan-400 block font-mono">60%</span>
-            <span class="text-[11px] text-slate-400 uppercase font-semibold">Solar Subsidy</span>
+          <div class="glass-card p-3.5 rounded-xl border border-white/10 text-center">
+            <span class="text-2xl font-black text-cyan-400 block font-mono">24/7</span>
+            <span class="text-[11px] text-slate-400 uppercase font-semibold">AI Advisory Access</span>
           </div>
         </div>
       </div>
     </div>
-
-    <!-- 3D Scene Controls Hint -->
-    <div
-      class="absolute bottom-6 right-8 hidden md:flex items-center gap-2 text-xs text-slate-400 bg-black/40 px-3 py-1.5 rounded-full backdrop-blur border border-white/10 z-20 pointer-events-none">
-      <i data-lucide="move" class="w-3.5 h-3.5 text-emerald-400"></i>
-      <span>Move mouse to explore 3D Earth & Bio-particles</span>
-    </div>
   </section>
 
-  <!-- ============================================================== -->
-  <!-- 4. 7-DAY WEATHER FORECASTING MODULE -->
-  <!-- ============================================================== -->
+  <!-- WEATHER MODULE -->
   <section id="weather" class="relative py-20 z-10 border-t border-white/5 bg-slate-950/40">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <!-- Section Header -->
       <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
         <div>
           <div
@@ -266,16 +308,14 @@
             7-Day Agricultural Micro-Climate
           </h2>
           <p class="text-sm text-slate-400 mt-2 max-w-xl">
-            Hyper-localized precipitation probabilities, soil drying windows,
-            and real-time farming advisories powered by satellite meteorology.
+            Hyper-localized precipitation probabilities, soil drying windows, and real-time farming advisories powered by satellite meteorology.
           </p>
         </div>
 
-        <!-- Location Status & Refresh -->
         <div class="flex items-center gap-3">
           <div class="px-4 py-2 rounded-xl bg-slate-900 border border-white/10 flex items-center gap-2 text-xs">
             <i data-lucide="map-pin" class="w-3.5 h-3.5 text-emerald-400"></i>
-            <span id="location-detect-status" class="text-slate-200 font-medium">Detecting GPS location...</span>
+            <span id="location-detect-status" class="text-slate-200 font-medium">Kolkata, India</span>
           </div>
           <button id="btn-refresh-weather"
             class="p-2.5 rounded-xl glass-card hover:border-emerald-400 text-slate-200 transition-all"
@@ -285,9 +325,7 @@
         </div>
       </div>
 
-      <!-- Main Weather Dashboard Layout -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-        <!-- Today's Hero Card (Large Glass Panel) -->
         <div
           class="glass-panel rounded-3xl p-8 lg:col-span-1 border border-emerald-500/20 relative overflow-hidden flex flex-col justify-between">
           <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-emerald-500/10 rounded-full blur-2xl"></div>
@@ -297,7 +335,7 @@
               <div>
                 <span class="text-xs uppercase tracking-wider text-emerald-400 font-bold">Current Conditions</span>
                 <h3 id="weather-current-location" class="text-lg font-bold text-white">
-                  Local Agricultural Basin
+                  Kolkata, India
                 </h3>
               </div>
               <div id="weather-current-icon" class="p-3 rounded-2xl bg-white/5 border border-white/10">
@@ -307,7 +345,7 @@
 
             <div class="flex items-baseline gap-3 mb-4">
               <span id="weather-current-temp" class="text-6xl font-black text-white font-mono">28°C</span>
-              <span id="weather-current-cond" class="text-lg font-semibold text-slate-300">Partly Cloudy</span>
+              <span id="weather-current-cond" class="text-lg font-semibold text-slate-300">Clear Sky</span>
             </div>
 
             <div class="grid grid-cols-3 gap-3 py-4 border-y border-white/10 text-center my-6">
@@ -326,27 +364,23 @@
             </div>
           </div>
 
-          <!-- Agricultural Advisory Note -->
           <div class="bg-emerald-950/40 border border-emerald-500/30 rounded-2xl p-4">
             <div class="flex items-center gap-2 text-xs font-bold text-emerald-400 mb-1">
               <i data-lucide="lightbulb" class="w-3.5 h-3.5 text-amber-400"></i>
               <span>Farming Advisory</span>
             </div>
             <p id="weather-current-advisory" class="text-xs text-slate-300 leading-relaxed">
-              Optimal atmospheric conditions for foliar bio-fertilizer
-              spraying and routine crop monitoring.
+              Optimal atmospheric conditions for foliar bio-fertilizer spraying and routine crop monitoring.
             </p>
           </div>
         </div>
 
-        <!-- 7-Day Forecast Strip Container (2 Columns on Large Screens) -->
         <div class="lg:col-span-2 flex flex-col justify-between">
           <h4 class="text-xs uppercase tracking-wider text-slate-400 font-bold mb-3 flex items-center gap-2">
             <i data-lucide="calendar-days" class="w-4 h-4 text-emerald-400"></i>
             <span>Daily Meteorological Trajectory</span>
           </h4>
           <div id="weather-forecast-grid" class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3 h-full">
-            <!-- Populated dynamically by weather.js -->
             <div class="glass-card rounded-xl p-4 text-center animate-pulse">
               Loading forecast...
             </div>
@@ -356,355 +390,154 @@
     </div>
   </section>
 
-  <!-- ============================================================== -->
-  <!-- 3. LOCATION TRACE & SMART CROP RECOMMENDATION -->
-  <!-- ============================================================== -->
-  <!-- ============================================================== -->
-  <!-- 3. AI SMART CROP ADVISOR -->
-  <!-- ============================================================== -->
+  <!-- AI SMART CROP ADVISOR -->
   <section id="recommendations" class="relative py-20 z-10">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-      <!-- Section Header -->
       <div class="text-center max-w-3xl mx-auto mb-12">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full
-        bg-amber-950/50 border border-amber-500/30 text-amber-300
-        text-xs font-semibold mb-3">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-950/50 border border-amber-500/30 text-amber-300 text-xs font-semibold mb-3">
           <i data-lucide="brain-circuit" class="w-3.5 h-3.5"></i>
           <span>AI-Powered Agronomy Intelligence</span>
         </div>
 
-        <h2 class="text-3xl sm:text-4xl font-black text-white tracking-tight
-        font-['Plus_Jakarta_Sans']">
+        <h2 class="text-3xl sm:text-4xl font-black text-white tracking-tight font-['Plus_Jakarta_Sans']">
           AI Smart Crop Advisor
         </h2>
 
         <p class="text-sm text-slate-400 mt-3 leading-relaxed">
-          Get crop recommendations based on your location, climate,
-          soil conditions, season, water availability and farming goals.
+          Get crop recommendations based on your location, climate, soil conditions, season, water availability and farming goals.
         </p>
       </div>
 
-      <!-- ====================================================== -->
-      <!-- FARM CONDITIONS INPUT PANEL -->
-      <!-- ====================================================== -->
-
-      <div class="glass-panel rounded-3xl p-6 md:p-8 mb-10 max-w-5xl mx-auto
-      border border-emerald-500/20 shadow-2xl">
-
-        <div class="flex flex-col sm:flex-row sm:items-center
-        justify-between gap-3 mb-7">
+      <div class="glass-panel rounded-3xl p-6 md:p-8 mb-10 max-w-5xl mx-auto border border-emerald-500/20 shadow-2xl">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-7">
           <div>
             <h3 class="text-lg font-bold text-white flex items-center gap-2">
               <i data-lucide="sprout" class="w-5 h-5 text-emerald-400"></i>
               Tell Us About Your Farm
             </h3>
-
             <p class="text-xs text-slate-400 mt-1">
-              More accurate information will help the AI provide
-              more relevant crop recommendations.
+              More accurate information will help the AI provide more relevant crop recommendations.
             </p>
           </div>
 
-          <!-- Weather / Location Integration Status -->
-          <div class="inline-flex items-center gap-2 px-3 py-2 rounded-xl
-          bg-cyan-950/30 border border-cyan-500/20 text-xs">
+          <div class="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-cyan-950/30 border border-cyan-500/20 text-xs">
             <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-
-            <span class="text-slate-400">
-              Climate:
-            </span>
-
-            <span id="crop-advisor-climate-status" class="font-semibold text-cyan-300">
-              Auto-Synchronized
-            </span>
+            <span class="text-slate-400">Climate:</span>
+            <span id="crop-advisor-climate-status" class="font-semibold text-cyan-300">Auto-Synchronized</span>
           </div>
         </div>
 
-        <!-- Input Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-
-          <!-- Soil Type -->
           <div>
-            <label for="soil-selector" class="block text-xs font-semibold text-slate-300 mb-2">
-              Dominant Soil Type
-            </label>
-
-            <select id="soil-selector" class="w-full glass-input rounded-xl px-4 py-3 text-xs
-            font-medium bg-slate-900 border border-white/10 text-white
-            focus:outline-none focus:border-emerald-400">
-              <option value="Loamy">
-                Fertile Loamy / Sandy Loam
-              </option>
-
-              <option value="Alluvial">
-                Alluvial Soil
-              </option>
-
-              <option value="Black">
-                Black Cotton Soil (Regur)
-              </option>
-
-              <option value="Clayey">
-                Heavy Clayey Soil
-              </option>
-
-              <option value="Red">
-                Red & Yellow Soil
-              </option>
-
-              <option value="Unknown">
-                Not Sure / Unknown
-              </option>
+            <label for="soil-selector" class="block text-xs font-semibold text-slate-300 mb-2">Dominant Soil Type</label>
+            <select id="soil-selector" class="w-full glass-input rounded-xl px-4 py-3 text-xs font-medium bg-slate-900 border border-white/10 text-white focus:outline-none focus:border-emerald-400">
+              <option value="Loamy">Fertile Loamy / Sandy Loam</option>
+              <option value="Alluvial">Alluvial Soil</option>
+              <option value="Black">Black Cotton Soil (Regur)</option>
+              <option value="Clayey">Heavy Clayey Soil</option>
+              <option value="Red">Red & Yellow Soil</option>
+              <option value="Unknown">Not Sure / Unknown</option>
             </select>
           </div>
 
-          <!-- Season -->
           <div>
-            <label for="advisor-season" class="block text-xs font-semibold text-slate-300 mb-2">
-              Growing Season
-            </label>
-
-            <select id="advisor-season" class="w-full glass-input rounded-xl px-4 py-3 text-xs
-            font-medium bg-slate-900 border border-white/10 text-white
-            focus:outline-none focus:border-emerald-400">
-              <option value="Auto">
-                Auto Detect Current Season
-              </option>
-
-              <option value="Kharif">
-                Kharif / Monsoon
-              </option>
-
-              <option value="Rabi">
-                Rabi / Winter
-              </option>
-
-              <option value="Zaid">
-                Zaid / Summer
-              </option>
+            <label for="advisor-season" class="block text-xs font-semibold text-slate-300 mb-2">Growing Season</label>
+            <select id="advisor-season" class="w-full glass-input rounded-xl px-4 py-3 text-xs font-medium bg-slate-900 border border-white/10 text-white focus:outline-none focus:border-emerald-400">
+              <option value="Auto">Auto Detect Current Season</option>
+              <option value="Kharif">Kharif / Monsoon</option>
+              <option value="Rabi">Rabi / Winter</option>
+              <option value="Zaid">Zaid / Summer</option>
             </select>
           </div>
 
-          <!-- Water Availability -->
           <div>
-            <label for="advisor-water" class="block text-xs font-semibold text-slate-300 mb-2">
-              Water Availability
-            </label>
-
-            <select id="advisor-water" class="w-full glass-input rounded-xl px-4 py-3 text-xs
-            font-medium bg-slate-900 border border-white/10 text-white
-            focus:outline-none focus:border-emerald-400">
-              <option value="Low">
-                Low / Water Scarce
-              </option>
-
-              <option value="Moderate" selected>
-                Moderate
-              </option>
-
-              <option value="High">
-                High / Reliable Supply
-              </option>
+            <label for="advisor-water" class="block text-xs font-semibold text-slate-300 mb-2">Water Availability</label>
+            <select id="advisor-water" class="w-full glass-input rounded-xl px-4 py-3 text-xs font-medium bg-slate-900 border border-white/10 text-white focus:outline-none focus:border-emerald-400">
+              <option value="Low">Low / Water Scarce</option>
+              <option value="Moderate" selected>Moderate</option>
+              <option value="High">High / Reliable Supply</option>
             </select>
           </div>
 
-          <!-- Irrigation -->
           <div>
-            <label for="advisor-irrigation" class="block text-xs font-semibold text-slate-300 mb-2">
-              Irrigation Source
-            </label>
-
-            <select id="advisor-irrigation" class="w-full glass-input rounded-xl px-4 py-3 text-xs
-            font-medium bg-slate-900 border border-white/10 text-white
-            focus:outline-none focus:border-emerald-400">
-              <option value="Rain-fed">
-                Rain-fed Only
-              </option>
-
-              <option value="Canal">
-                Canal Irrigation
-              </option>
-
-              <option value="Tube Well">
-                Tube Well / Borewell
-              </option>
-
-              <option value="Drip">
-                Drip Irrigation
-              </option>
-
-              <option value="Sprinkler">
-                Sprinkler Irrigation
-              </option>
-
-              <option value="Other">
-                Other / Mixed
-              </option>
+            <label for="advisor-irrigation" class="block text-xs font-semibold text-slate-300 mb-2">Irrigation Source</label>
+            <select id="advisor-irrigation" class="w-full glass-input rounded-xl px-4 py-3 text-xs font-medium bg-slate-900 border border-white/10 text-white focus:outline-none focus:border-emerald-400">
+              <option value="Rain-fed">Rain-fed Only</option>
+              <option value="Canal">Canal Irrigation</option>
+              <option value="Tube Well">Tube Well / Borewell</option>
+              <option value="Drip">Drip Irrigation</option>
+              <option value="Sprinkler">Sprinkler Irrigation</option>
+              <option value="Other">Other / Mixed</option>
             </select>
           </div>
 
-          <!-- Land Size -->
           <div>
-            <label for="advisor-land-size" class="block text-xs font-semibold text-slate-300 mb-2">
-              Land Size
-              <span class="text-slate-500 font-normal">
-                (Optional)
-              </span>
-            </label>
-
+            <label for="advisor-land-size" class="block text-xs font-semibold text-slate-300 mb-2">Land Size <span class="text-slate-500 font-normal">(Optional)</span></label>
             <div class="relative">
-              <input type="number" id="advisor-land-size" min="0" step="0.1" placeholder="e.g. 2.5" class="w-full glass-input rounded-xl px-4 py-3 pr-16
-              text-xs font-medium bg-slate-900 border border-white/10
-              text-white placeholder:text-slate-500 focus:outline-none
-              focus:border-emerald-400" />
-
-              <span class="absolute right-4 top-1/2 -translate-y-1/2
-              text-[11px] text-slate-500">
-                Acres
-              </span>
+              <input type="number" id="advisor-land-size" min="0" step="0.1" placeholder="e.g. 2.5" class="w-full glass-input rounded-xl px-4 py-3 pr-16 text-xs font-medium bg-slate-900 border border-white/10 text-white placeholder:text-slate-500 focus:outline-none focus:border-emerald-400" />
+              <span class="absolute right-4 top-1/2 -translate-y-1/2 text-[11px] text-slate-500">Acres</span>
             </div>
           </div>
 
-          <!-- Farmer Priority -->
           <div>
-            <label for="advisor-priority" class="block text-xs font-semibold text-slate-300 mb-2">
-              Farming Priority
-            </label>
-
-            <select id="advisor-priority" class="w-full glass-input rounded-xl px-4 py-3 text-xs
-            font-medium bg-slate-900 border border-white/10 text-white
-            focus:outline-none focus:border-emerald-400">
-              <option value="Balanced" selected>
-                Balanced Recommendation
-              </option>
-
-              <option value="Higher Profit">
-                Higher Profit Potential
-              </option>
-
-              <option value="Low Water">
-                Lower Water Requirement
-              </option>
-
-              <option value="Low Risk">
-                Lower Farming Risk
-              </option>
-
-              <option value="Short Duration">
-                Short Duration Crop
-              </option>
+            <label for="advisor-priority" class="block text-xs font-semibold text-slate-300 mb-2">Farming Priority</label>
+            <select id="advisor-priority" class="w-full glass-input rounded-xl px-4 py-3 text-xs font-medium bg-slate-900 border border-white/10 text-white focus:outline-none focus:border-emerald-400">
+              <option value="Balanced" selected>Balanced Recommendation</option>
+              <option value="Higher Profit">Higher Profit Potential</option>
+              <option value="Low Water">Lower Water Requirement</option>
+              <option value="Low Risk">Lower Farming Risk</option>
+              <option value="Short Duration">Short Duration Crop</option>
             </select>
           </div>
         </div>
 
-        <!-- Context Information -->
-        <div class="mt-6 p-4 rounded-2xl bg-emerald-950/20
-        border border-emerald-500/20">
+        <div class="mt-6 p-4 rounded-2xl bg-emerald-950/20 border border-emerald-500/20">
           <div class="flex items-start gap-3">
             <i data-lucide="map-pin" class="w-4 h-4 text-emerald-400 mt-0.5 shrink-0"></i>
-
             <div>
-              <p class="text-xs font-semibold text-emerald-300">
-                Location & Weather Context
-              </p>
-
+              <p class="text-xs font-semibold text-emerald-300">Location & Weather Context</p>
               <p id="crop-advisor-context" class="text-[11px] text-slate-400 mt-1 leading-relaxed">
-                Your existing KISAAN weather data will be used as
-                additional climate context when generating recommendations.
+                Your existing KISAAN weather data will be used as additional climate context when generating recommendations.
               </p>
             </div>
           </div>
         </div>
 
-        <!-- Analyze Button -->
         <div class="mt-7 flex justify-center">
-          <button id="btn-run-recommendation" class="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r
-          from-emerald-600 to-teal-600 hover:from-emerald-500
-          hover:to-teal-500 text-white font-bold text-sm rounded-xl
-          shadow-lg shadow-emerald-900 transition-all flex
-          items-center justify-center gap-2">
+          <button id="btn-run-recommendation" class="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-sm rounded-xl shadow-lg shadow-emerald-900 transition-all flex items-center justify-center gap-2">
             <i data-lucide="sparkles" class="w-4 h-4 text-amber-300"></i>
-
-            <span>
-              Get AI Crop Recommendations
-            </span>
+            <span>Get AI Crop Recommendations</span>
           </button>
         </div>
-
-        <p class="text-[10px] text-slate-500 text-center mt-3">
-          Recommendations are advisory and should be considered alongside
-          local agricultural guidance and actual field conditions.
-        </p>
       </div>
-
-      <!-- ====================================================== -->
-      <!-- AI ANALYSIS STATUS -->
-      <!-- ====================================================== -->
 
       <div id="crop-advisor-loading" class="hidden max-w-5xl mx-auto mb-8">
-        <div class="glass-panel rounded-2xl p-6 border
-        border-emerald-500/20 text-center">
-          <div class="w-12 h-12 mx-auto rounded-full bg-emerald-500/10
-          flex items-center justify-center mb-3">
+        <div class="glass-panel rounded-2xl p-6 border border-emerald-500/20 text-center">
+          <div class="w-12 h-12 mx-auto rounded-full bg-emerald-500/10 flex items-center justify-center mb-3">
             <i data-lucide="loader-circle" class="w-6 h-6 text-emerald-400 animate-spin"></i>
           </div>
-
-          <p class="text-sm font-semibold text-white">
-            AI is analyzing your farm conditions...
-          </p>
-
-          <p class="text-xs text-slate-400 mt-1">
-            Comparing climate, season, soil and water requirements.
-          </p>
+          <p class="text-sm font-semibold text-white">AI is analyzing your farm conditions...</p>
         </div>
       </div>
-
-      <!-- ====================================================== -->
-      <!-- RECOMMENDATION RESULTS -->
-      <!-- ====================================================== -->
 
       <div id="crop-advisor-results-header" class="hidden max-w-5xl mx-auto mb-5">
-        <div class="flex flex-col sm:flex-row sm:items-center
-        justify-between gap-3">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <p class="text-xs uppercase tracking-wider
-            text-emerald-400 font-bold">
-              AI Recommendation Report
-            </p>
-
-            <h3 class="text-xl font-bold text-white mt-1">
-              Best Crops for Your Conditions
-            </h3>
+            <p class="text-xs uppercase tracking-wider text-emerald-400 font-bold">AI Recommendation Report</p>
+            <h3 class="text-xl font-bold text-white mt-1">Best Crops for Your Conditions</h3>
           </div>
-
-          <span id="crop-advisor-analysis-source" class="px-3 py-1.5 rounded-full bg-emerald-500/10
-          border border-emerald-500/20 text-[10px]
-          font-bold text-emerald-300 uppercase tracking-wider">
-            AI Generated
-          </span>
         </div>
       </div>
 
-      <!-- Keep this ID because existing JS already references it -->
-      <div id="recommendation-results-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6
-      max-w-5xl mx-auto">
-        <!-- AI crop recommendation cards will be rendered here -->
-      </div>
-
+      <div id="recommendation-results-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto"></div>
     </div>
   </section>
 
-  <!-- ============================================================== -->
   <!-- KISAAN AI ASSISTANT -->
-  <!-- ============================================================== -->
   <section id="ai-assistant" class="relative py-20 z-10 border-t border-white/5 bg-slate-950/40">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-      <!-- Section Header -->
       <div class="text-center max-w-3xl mx-auto mb-10">
-        <div
-          class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-950/50 border border-violet-500/30 text-violet-300 text-xs font-semibold mb-3">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-950/50 border border-violet-500/30 text-violet-300 text-xs font-semibold mb-3">
           <i data-lucide="bot" class="w-3.5 h-3.5"></i>
           <span>Multilingual Local AI</span>
         </div>
@@ -718,76 +551,35 @@
         </p>
       </div>
 
-      <!-- Mandatory Language Selection -->
-      <div id="assistant-language-panel"
-        class="glass-panel rounded-3xl p-6 sm:p-8 max-w-3xl mx-auto border border-violet-500/20 shadow-2xl">
-
+      <div id="assistant-language-panel" class="glass-panel rounded-3xl p-6 sm:p-8 max-w-3xl mx-auto border border-violet-500/20 shadow-2xl">
         <div class="text-center mb-7">
-          <div
-            class="w-14 h-14 mx-auto rounded-2xl bg-violet-500/10 border border-violet-500/30 flex items-center justify-center mb-4">
+          <div class="w-14 h-14 mx-auto rounded-2xl bg-violet-500/10 border border-violet-500/30 flex items-center justify-center mb-4">
             <i data-lucide="languages" class="w-7 h-7 text-violet-300"></i>
           </div>
 
-          <h3 class="text-xl font-bold text-white">
-            Choose your language
-          </h3>
-
-          <p class="text-sm text-slate-400 mt-2">
-            अपनी भाषा चुनें • আপনার ভাষা নির্বাচন করুন
-          </p>
-
-          <p class="text-xs text-slate-500 mt-2">
-            Select a language to start the KISAAN AI Assistant.
-          </p>
+          <h3 class="text-xl font-bold text-white">Choose your language</h3>
+          <p class="text-sm text-slate-400 mt-2">अपनी भाषा चुनें • আপনার ভাষা নির্বাচন করুন</p>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <button type="button" data-assistant-language="English"
-            class="assistant-language-btn group rounded-2xl border border-white/10 bg-white/5 hover:bg-violet-500/10 hover:border-violet-400/50 p-5 transition-all text-center">
+          <button type="button" data-assistant-language="English" class="assistant-language-btn group rounded-2xl border border-white/10 bg-white/5 hover:bg-violet-500/10 hover:border-violet-400/50 p-5 transition-all text-center">
             <span class="block text-2xl mb-2">🇬🇧</span>
-            <span class="block text-sm font-bold text-white group-hover:text-violet-200">
-              English
-            </span>
-            <span class="block text-[11px] text-slate-500 mt-1">
-              Continue in English
-            </span>
+            <span class="block text-sm font-bold text-white group-hover:text-violet-200">English</span>
           </button>
 
-          <button type="button" data-assistant-language="Hindi"
-            class="assistant-language-btn group rounded-2xl border border-white/10 bg-white/5 hover:bg-violet-500/10 hover:border-violet-400/50 p-5 transition-all text-center">
+          <button type="button" data-assistant-language="Hindi" class="assistant-language-btn group rounded-2xl border border-white/10 bg-white/5 hover:bg-violet-500/10 hover:border-violet-400/50 p-5 transition-all text-center">
             <span class="block text-2xl mb-2">🇮🇳</span>
-            <span class="block text-sm font-bold text-white group-hover:text-violet-200">
-              हिन्दी
-            </span>
-            <span class="block text-[11px] text-slate-500 mt-1">
-              हिन्दी में जारी रखें
-            </span>
+            <span class="block text-sm font-bold text-white group-hover:text-violet-200">हिन्दी</span>
           </button>
 
-          <button type="button" data-assistant-language="Bengali"
-            class="assistant-language-btn group rounded-2xl border border-white/10 bg-white/5 hover:bg-violet-500/10 hover:border-violet-400/50 p-5 transition-all text-center">
+          <button type="button" data-assistant-language="Bengali" class="assistant-language-btn group rounded-2xl border border-white/10 bg-white/5 hover:bg-violet-500/10 hover:border-violet-400/50 p-5 transition-all text-center">
             <span class="block text-2xl mb-2">🇮🇳</span>
-            <span class="block text-sm font-bold text-white group-hover:text-violet-200">
-              বাংলা
-            </span>
-            <span class="block text-[11px] text-slate-500 mt-1">
-              বাংলায় চালিয়ে যান
-            </span>
+            <span class="block text-sm font-bold text-white group-hover:text-violet-200">বাংলা</span>
           </button>
-        </div>
-
-        <div class="mt-6 flex items-start gap-3 rounded-2xl bg-violet-950/20 border border-violet-500/20 p-4">
-          <i data-lucide="shield-check" class="w-4 h-4 text-violet-300 mt-0.5 shrink-0"></i>
-          <p class="text-[11px] text-slate-400 leading-relaxed">
-            The assistant runs with KISAAN's local AI backend. A language must be selected before the chat starts.
-          </p>
         </div>
       </div>
 
-      <!-- Text Chat Interface: hidden until a language is selected -->
-      <div id="assistant-chat-panel"
-        class="hidden glass-panel rounded-3xl max-w-4xl mx-auto border border-violet-500/20 shadow-2xl overflow-hidden">
-
+      <div id="assistant-chat-panel" class="hidden glass-panel rounded-3xl max-w-4xl mx-auto border border-violet-500/20 shadow-2xl overflow-hidden">
         <div class="flex items-center justify-between gap-4 px-5 sm:px-6 py-4 border-b border-white/10 bg-slate-950/40">
           <div class="flex items-center gap-3">
             <div class="w-10 h-10 rounded-xl bg-violet-500/10 border border-violet-500/30 flex items-center justify-center">
@@ -795,913 +587,424 @@
             </div>
             <div>
               <h3 class="text-sm font-bold text-white">KISAAN AI Assistant</h3>
-              <p class="text-[11px] text-slate-400">
-                Language: <span id="assistant-current-language" class="font-semibold text-violet-300">English</span>
-              </p>
+              <p class="text-[11px] text-slate-400">Language: <span id="assistant-current-language" class="font-semibold text-violet-300">English</span></p>
             </div>
           </div>
 
-          <button id="assistant-change-language" type="button"
-            class="px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-slate-300 hover:text-white transition-all flex items-center gap-2">
+          <button id="assistant-change-language" type="button" class="px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-slate-300 hover:text-white transition-all flex items-center gap-2">
             <i data-lucide="languages" class="w-3.5 h-3.5"></i>
             <span>Change Language</span>
           </button>
         </div>
 
-        <div id="assistant-messages"
-          class="h-[420px] overflow-y-auto p-5 sm:p-6 space-y-4 bg-black/10"
-          aria-live="polite"></div>
+        <div id="assistant-messages" class="h-[420px] overflow-y-auto p-5 sm:p-6 space-y-4 bg-black/10"></div>
 
         <div class="p-4 sm:p-5 border-t border-white/10 bg-slate-950/40">
           <div id="assistant-image-preview" class="hidden mb-3">
             <div class="inline-flex items-center gap-3 max-w-full rounded-2xl border border-violet-500/20 bg-violet-950/20 p-2.5">
-              <img id="assistant-image-preview-img" src="" alt="Selected image preview"
-                class="w-16 h-16 rounded-xl object-cover border border-white/10 bg-black" />
-              <div class="min-w-0">
-                <p id="assistant-image-name" class="text-xs font-semibold text-slate-200 truncate max-w-[220px]"></p>
-                <p class="text-[10px] text-slate-500 mt-1">JPG, JPEG, PNG or WEBP</p>
-              </div>
-              <button id="assistant-remove-image" type="button"
-                class="ml-1 p-2 rounded-xl bg-white/5 hover:bg-red-500/10 border border-white/10 hover:border-red-500/30 text-slate-400 hover:text-red-300 transition-all"
-                aria-label="Remove selected image" title="Remove image">
-                <i data-lucide="x" class="w-4 h-4"></i>
-              </button>
+              <img id="assistant-image-preview-img" src="" alt="Selected image preview" class="w-16 h-16 rounded-xl object-cover border border-white/10 bg-black" />
+              <p id="assistant-image-name" class="text-xs font-semibold text-slate-200 truncate max-w-[220px]"></p>
+              <button id="assistant-remove-image" type="button" class="ml-1 p-2 rounded-xl bg-white/5 hover:bg-red-500/10 border border-white/10 hover:border-red-500/30 text-slate-400 hover:text-red-300 transition-all"><i data-lucide="x" class="w-4 h-4"></i></button>
             </div>
           </div>
 
           <div id="assistant-video-preview" class="hidden mb-3">
             <div class="inline-flex items-center gap-3 max-w-full rounded-2xl border border-violet-500/20 bg-violet-950/20 p-2.5">
               <video id="assistant-video-preview-video" class="w-24 h-16 rounded-xl object-cover border border-white/10 bg-black" muted playsinline></video>
-              <div class="min-w-0">
-                <p id="assistant-video-name" class="text-xs font-semibold text-slate-200 truncate max-w-[220px]"></p>
-                <p class="text-[10px] text-slate-500 mt-1">MP4, MOV, WEBM or MKV</p>
-              </div>
-              <button id="assistant-remove-video" type="button"
-                class="ml-1 p-2 rounded-xl bg-white/5 hover:bg-red-500/10 border border-white/10 hover:border-red-500/30 text-slate-400 hover:text-red-300 transition-all"
-                aria-label="Remove selected video" title="Remove video">
-                <i data-lucide="x" class="w-4 h-4"></i>
-              </button>
+              <p id="assistant-video-name" class="text-xs font-semibold text-slate-200 truncate max-w-[220px]"></p>
+              <button id="assistant-remove-video" type="button" class="ml-1 p-2 rounded-xl bg-white/5 hover:bg-red-500/10 border border-white/10 hover:border-red-500/30 text-slate-400 hover:text-red-300 transition-all"><i data-lucide="x" class="w-4 h-4"></i></button>
             </div>
           </div>
 
           <form id="assistant-chat-form" class="flex items-end gap-3">
             <input id="assistant-image-input" type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/quicktime,video/webm,video/x-matroska,.mkv" class="hidden" />
 
-            <button id="assistant-image-btn" type="button"
-              class="h-12 w-12 shrink-0 rounded-2xl bg-white/5 hover:bg-violet-500/10 border border-white/10 hover:border-violet-400/40 text-slate-300 hover:text-violet-200 transition-all flex items-center justify-center"
-              title="Attach image or video" aria-label="Attach image or video">
+            <button id="assistant-image-btn" type="button" class="h-12 w-12 shrink-0 rounded-2xl bg-white/5 hover:bg-violet-500/10 border border-white/10 hover:border-violet-400/40 text-slate-300 hover:text-violet-200 transition-all flex items-center justify-center">
               <i data-lucide="paperclip" class="w-5 h-5"></i>
             </button>
 
-            <textarea id="assistant-message-input" rows="1" maxlength="2000"
-              placeholder="Ask KISAAN AI..."
-              class="flex-1 glass-input rounded-2xl px-4 py-3 text-sm text-white bg-slate-900 border border-white/10 placeholder:text-slate-500 focus:outline-none focus:border-violet-400 resize-none"></textarea>
+            <textarea id="assistant-message-input" rows="1" maxlength="2000" placeholder="Ask KISAAN AI..." class="flex-1 glass-input rounded-2xl px-4 py-3 text-sm text-white bg-slate-900 border border-white/10 placeholder:text-slate-500 focus:outline-none focus:border-violet-400 resize-none"></textarea>
 
-            <button id="assistant-send-btn" type="submit"
-              class="h-12 px-5 rounded-2xl bg-gradient-to-r from-violet-600 to-emerald-600 hover:from-violet-500 hover:to-emerald-500 text-white font-bold text-sm transition-all flex items-center justify-center gap-2">
+            <button id="assistant-send-btn" type="submit" class="h-12 px-5 rounded-2xl bg-gradient-to-r from-violet-600 to-emerald-600 hover:from-violet-500 hover:to-emerald-500 text-white font-bold text-sm transition-all flex items-center justify-center gap-2">
               <i data-lucide="send" class="w-4 h-4"></i>
               <span class="hidden sm:inline">Send</span>
             </button>
           </form>
 
-          <p id="assistant-chat-status" class="text-[10px] text-slate-500 mt-2 min-h-[14px]">
-            Local AI • Text + image + video chat
-          </p>
+          <p id="assistant-chat-status" class="text-[10px] text-slate-500 mt-2 min-h-[14px]">Local AI • Text + image + video chat</p>
         </div>
       </div>
-
     </div>
   </section>
 
-  <!-- ============================================================== -->
-  <!-- 3D ANIMATED HOMEPAGE CAROUSEL (Short Videos & Cards) -->
-  <!-- ============================================================== -->
+  <!-- 3D CAROUSEL -->
   <section class="relative py-20 z-10 border-t border-white/5 bg-slate-950/60 overflow-hidden">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center max-w-2xl mx-auto mb-12">
-        <div
-          class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/50 border border-emerald-500/30 text-emerald-300 text-xs font-semibold mb-3">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/50 border border-emerald-500/30 text-emerald-300 text-xs font-semibold mb-3">
           <i data-lucide="film" class="w-3.5 h-3.5"></i>
           <span>3D Machinery & Innovation Showcase</span>
         </div>
         <h2 class="text-3xl sm:text-4xl font-black text-white tracking-tight font-['Plus_Jakarta_Sans']">
           Interactive Agricultural Visual Carousel
         </h2>
-        <p class="text-sm text-slate-400 mt-2">
-          Experience modern high-efficiency agricultural operations, drone
-          demos, and precision equipment in 3D perspective.
-        </p>
       </div>
 
-      <!-- 3D Carousel Stage -->
       <div class="carousel-3d-scene relative w-full h-[440px] flex items-center justify-center">
-        <div id="carousel-3d-ring" class="carousel-3d-ring flex items-center justify-center">
-          <!-- Populated by carousel3d.js -->
-        </div>
+        <div id="carousel-3d-ring" class="carousel-3d-ring flex items-center justify-center"></div>
 
-        <!-- Navigation Buttons -->
-        <button id="carousel-prev-btn"
-          class="absolute left-4 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full glass-card hover:border-emerald-400 text-white shadow-xl transition-all"
-          aria-label="Previous Slide">
-          <i data-lucide="chevron-left" class="w-6 h-6"></i>
-        </button>
-        <button id="carousel-next-btn"
-          class="absolute right-4 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full glass-card hover:border-emerald-400 text-white shadow-xl transition-all"
-          aria-label="Next Slide">
-          <i data-lucide="chevron-right" class="w-6 h-6"></i>
-        </button>
+        <button id="carousel-prev-btn" class="absolute left-4 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full glass-card hover:border-emerald-400 text-white shadow-xl transition-all"><i data-lucide="chevron-left" class="w-6 h-6"></i></button>
+        <button id="carousel-next-btn" class="absolute right-4 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full glass-card hover:border-emerald-400 text-white shadow-xl transition-all"><i data-lucide="chevron-right" class="w-6 h-6"></i></button>
       </div>
 
-      <!-- Carousel Pagination Dots -->
       <div id="carousel-dots" class="flex items-center justify-center gap-2 mt-6"></div>
     </div>
   </section>
 
-  <!-- ============================================================== -->
-  <!-- 2. SEASONAL CROPS GUIDE & PROCESS HUB -->
-  <!-- ============================================================== -->
+  <!-- SEASONAL CROPS GUIDE -->
   <section id="crops" class="relative py-20 z-10">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <!-- Section Header -->
       <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
         <div>
-          <div
-            class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/50 border border-emerald-500/30 text-emerald-300 text-xs font-semibold mb-3">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/50 border border-emerald-500/30 text-emerald-300 text-xs font-semibold mb-3">
             <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
             <span>Annual Farming Cycles</span>
           </div>
           <h2 class="text-3xl sm:text-4xl font-black text-white tracking-tight font-['Plus_Jakarta_Sans']">
             Seasonal Crops Guide & Step-by-Step Hub
           </h2>
-          <p class="text-sm text-slate-400 mt-2 max-w-xl">
-            Detailed agronomy roadmaps covering land preparation, certified
-            seed treatment, critical irrigation stages, and harvest
-            preservation.
-          </p>
         </div>
 
-        <!-- Season Filter Tabs -->
         <div class="flex flex-wrap items-center gap-2 bg-slate-900/80 p-1.5 rounded-2xl border border-white/10">
-          <button data-season="all"
-            class="season-tab-btn px-4 py-2 rounded-xl text-xs font-semibold bg-emerald-600 text-white transition-all">
-            All Crops
-          </button>
-          <button data-season="summer"
-            class="season-tab-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white/5 text-slate-300 hover:text-white transition-all">
-            Summer
-          </button>
-          <button data-season="kharif"
-            class="season-tab-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white/5 text-slate-300 hover:text-white transition-all">
-            Rainy (Kharif)
-          </button>
-          <button data-season="rabi"
-            class="season-tab-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white/5 text-slate-300 hover:text-white transition-all">
-            Winter (Rabi)
-          </button>
-          <button data-season="zaid"
-            class="season-tab-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white/5 text-slate-300 hover:text-white transition-all">
-            Vegetables (Zaid)
-          </button>
+          <button data-season="all" class="season-tab-btn px-4 py-2 rounded-xl text-xs font-semibold bg-emerald-600 text-white transition-all">All Crops</button>
+          <button data-season="summer" class="season-tab-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white/5 text-slate-300 hover:text-white transition-all">Summer</button>
+          <button data-season="kharif" class="season-tab-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white/5 text-slate-300 hover:text-white transition-all">Rainy (Kharif)</button>
+          <button data-season="rabi" class="season-tab-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white/5 text-slate-300 hover:text-white transition-all">Winter (Rabi)</button>
+          <button data-season="zaid" class="season-tab-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white/5 text-slate-300 hover:text-white transition-all">Vegetables (Zaid)</button>
         </div>
       </div>
 
-      <!-- Crops Grid -->
-      <div id="crops-grid-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <!-- Rendered dynamically by app.js loadCrops() -->
-      </div>
+      <div id="crops-grid-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
     </div>
   </section>
 
-  <!-- ============================================================== -->
-  <!-- 5. AI-BASED CROP DISEASE DIAGNOSTIC TOOL -->
-  <!-- ============================================================== -->
+  <!-- AI-BASED CROP DISEASE DIAGNOSTIC TOOL -->
   <section id="ai-diagnostics" class="relative py-20 z-10 border-t border-white/5 bg-slate-950/50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center max-w-2xl mx-auto mb-12">
-        <div
-          class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-950/50 border border-teal-500/30 text-teal-300 text-xs font-semibold mb-3">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-950/50 border border-teal-500/30 text-teal-300 text-xs font-semibold mb-3">
           <i data-lucide="scan" class="w-3.5 h-3.5"></i>
           <span>Computer Vision & Deep Pathology</span>
         </div>
         <h2 class="text-3xl sm:text-4xl font-black text-white tracking-tight font-['Plus_Jakarta_Sans']">
           AI Crop Leaf Disease Diagnostic Doctor
         </h2>
-        <p class="text-sm text-slate-400 mt-2">
-          Drop or upload a photo of an affected leaf. Our inference engine
-          computes symptom vectors, identifies pathogens, evaluates severity,
-          and provides immediate remedies.
-        </p>
       </div>
 
-      <!-- Main AI Dropzone & Diagnostics Container -->
       <div class="max-w-4xl mx-auto">
         <div class="glass-panel rounded-3xl p-8 border border-teal-500/20 shadow-2xl">
-          <!-- Dropzone Container -->
-          <div id="ai-scanner-box"
-            class="scanner-container relative border-2 border-dashed border-white/20 hover:border-emerald-400 rounded-2xl p-8 text-center transition-all bg-black/30 cursor-pointer">
-            <!-- Animated Laser Scanning Beam -->
+          <div id="ai-scanner-box" class="scanner-container relative border-2 border-dashed border-white/20 hover:border-emerald-400 rounded-2xl p-8 text-center transition-all bg-black/30 cursor-pointer">
             <div class="laser-beam"></div>
-
             <input type="file" id="ai-file-input" accept="image/*" class="hidden" />
 
-            <!-- Dropzone Default View -->
             <div id="ai-dropzone-placeholder" class="flex flex-col items-center justify-center py-8">
-              <div
-                class="w-16 h-16 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mb-4 shadow-lg">
+              <div class="w-16 h-16 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mb-4 shadow-lg">
                 <i data-lucide="upload-cloud" class="w-8 h-8"></i>
               </div>
-              <h4 class="text-base font-bold text-white mb-1">
-                Drag & Drop Affected Leaf Photo Here
-              </h4>
-              <p class="text-xs text-slate-400 mb-4">
-                Supports PNG, JPG, WEBP formats up to 16MB
-              </p>
-              <button onclick="document.getElementById('ai-file-input').click()"
-                class="px-5 py-2.5 bg-white/10 hover:bg-white/20 text-white text-xs font-semibold rounded-xl transition-all border border-white/10">
-                Browse From Device / Camera
-              </button>
+              <h4 class="text-base font-bold text-white mb-1">Drag & Drop Affected Leaf Photo Here</h4>
+              <button onclick="document.getElementById('ai-file-input').click()" class="px-5 py-2.5 bg-white/10 hover:bg-white/20 text-white text-xs font-semibold rounded-xl transition-all border border-white/10">Browse From Device / Camera</button>
             </div>
 
-            <!-- Uploaded Image Preview View -->
             <div id="ai-preview-container" class="hidden flex flex-col items-center">
               <div class="relative max-h-72 rounded-xl overflow-hidden border border-white/20 shadow-xl mb-4 bg-black">
                 <img id="ai-preview-img" src="" alt="Selected leaf" class="max-h-72 object-contain" />
               </div>
-              <p id="ai-scan-status" class="text-xs font-mono text-emerald-400 font-bold mb-2">
-                Specimen Loaded • Ready to Scan
-              </p>
-              <button onclick="document.getElementById('ai-file-input').click()"
-                class="text-xs text-slate-400 hover:text-white underline">
-                Choose a different photo
-              </button>
+              <p id="ai-scan-status" class="text-xs font-mono text-emerald-400 font-bold mb-2">Specimen Loaded • Ready to Scan</p>
             </div>
           </div>
 
-          <!-- Crop / Plant Selection -->
           <div class="mt-6">
-            <label for="ai-crop-selector" class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
-              Crop / Plant Type
-            </label>
-
-            <select id="ai-crop-selector"
-              class="w-full glass-input rounded-xl px-4 py-3 text-sm font-medium bg-slate-900 border border-white/10 text-white focus:outline-none focus:border-emerald-400 transition-colors">
+            <label for="ai-crop-selector" class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Crop / Plant Type</label>
+            <select id="ai-crop-selector" class="w-full glass-input rounded-xl px-4 py-3 text-sm font-medium bg-slate-900 border border-white/10 text-white focus:outline-none focus:border-emerald-400">
               <option value="" selected disabled>Select the crop before analysis</option>
               <option value="Rice">Rice / Paddy</option>
               <option value="Wheat">Wheat</option>
               <option value="Maize">Maize / Corn</option>
-              <option value="Potato">Potato</option>
               <option value="Tomato">Tomato</option>
-              <option value="Mustard">Mustard</option>
-              <option value="Jute">Jute</option>
-              <option value="Sugarcane">Sugarcane</option>
-              <option value="Cotton">Cotton</option>
-              <option value="Soybean">Soybean</option>
-              <option value="Groundnut">Groundnut / Peanut</option>
-              <option value="Chickpea">Chickpea / Gram</option>
-              <option value="Lentil">Lentil</option>
-              <option value="Pea">Pea</option>
-              <option value="Brinjal">Brinjal / Eggplant</option>
-              <option value="Chilli">Chilli / Pepper</option>
-              <option value="Onion">Onion</option>
-              <option value="Garlic">Garlic</option>
-              <option value="Cabbage">Cabbage</option>
-              <option value="Cauliflower">Cauliflower</option>
-              <option value="Cucumber">Cucumber</option>
-              <option value="Okra">Okra / Lady's Finger</option>
-              <option value="Banana">Banana</option>
-              <option value="Mango">Mango</option>
-              <option value="Tea">Tea</option>
               <option value="Other">Other / Not Listed</option>
             </select>
-
-            <!-- Custom crop input: shown by ai_diagnostics.js only when "Other" is selected -->
-            <div id="ai-custom-crop-wrapper" class="hidden mt-3">
-              <label for="ai-custom-crop-input" class="block text-xs font-semibold text-slate-300 mb-1.5">
-                Enter Crop / Plant Name
-              </label>
-
-              <input type="text" id="ai-custom-crop-input" maxlength="80"
-                placeholder="e.g. Papaya, Guava, Sunflower, Turmeric"
-                class="w-full glass-input rounded-xl px-4 py-3 text-sm bg-slate-900 border border-white/10 text-white placeholder:text-slate-500 focus:outline-none focus:border-emerald-400 transition-colors" />
-
-              <p class="text-[11px] text-slate-500 mt-2">
-                Type the crop or plant name if it is not available in the list above.
-              </p>
-            </div>
-
-            <p class="text-[11px] text-slate-500 mt-2">
-              Selecting the correct crop helps the AI produce a more relevant diagnosis and treatment recommendation.
-            </p>
           </div>
 
-          <!-- Quick Test Samples & Action -->
           <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6 pt-6 border-t border-white/10">
-            <div class="flex flex-wrap items-center gap-2 text-xs">
-              <span class="text-slate-400">Or test instant sample:</span>
-              <button
-                data-url="https://images.unsplash.com/photo-1592841200221-a6898f307baa?auto=format&fit=crop&w=400&q=80"
-                data-crop="Tomato"
-                class="ai-sample-btn px-2.5 py-1 rounded-lg bg-white/5 hover:bg-emerald-950 border border-white/10 text-slate-300 text-xs transition-colors">
-                Tomato Leaf Blight
-              </button>
-              <button
-                data-url="https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?auto=format&fit=crop&w=400&q=80"
-                data-crop="Wheat"
-                class="ai-sample-btn px-2.5 py-1 rounded-lg bg-white/5 hover:bg-emerald-950 border border-white/10 text-slate-300 text-xs transition-colors">
-                Wheat Stripe Rust
-              </button>
-              <button
-                data-url="https://images.unsplash.com/photo-1536617621972-602b9ce4a7d3?auto=format&fit=crop&w=400&q=80"
-                data-crop="Rice"
-                class="ai-sample-btn px-2.5 py-1 rounded-lg bg-white/5 hover:bg-emerald-950 border border-white/10 text-slate-300 text-xs transition-colors">
-                Healthy Green Leaf
-              </button>
-            </div>
-
-            <button id="ai-analyze-btn" disabled
-              class="opacity-50 cursor-not-allowed w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-teal-500 to-emerald-500 hover:from-teal-400 hover:to-emerald-400 text-slate-950 font-extrabold text-sm rounded-xl shadow-xl transition-all flex items-center justify-center gap-2">
+            <button id="ai-analyze-btn" disabled class="opacity-50 cursor-not-allowed w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-teal-500 to-emerald-500 text-slate-950 font-extrabold text-sm rounded-xl transition-all flex items-center justify-center gap-2">
               <i data-lucide="cpu" class="w-4 h-4"></i>
               <span>Analyze Leaf Specimen</span>
             </button>
           </div>
         </div>
 
-        <!-- AI Diagnostic Results Card (Appears after analysis) -->
-        <div id="ai-result-card"
-          class="hidden mt-8 glass-panel rounded-3xl p-8 border border-emerald-500/30 shadow-2xl">
-          <div class="flex flex-col md:flex-row md:items-center justify-between pb-6 border-b border-white/10 gap-4">
-            <div>
-              <div class="flex items-center gap-3 mb-1">
-                <h3 id="diag-disease-name" class="text-2xl font-black text-white">
-                  Pathology Name
-                </h3>
-                <span id="diag-severity-badge" class="px-3 py-1 text-xs font-bold rounded-full">High Severity</span>
-              </div>
-              <p id="diag-crop-name" class="text-xs text-slate-400 font-medium">
-                Host Crop: Unknown
-              </p>
-            </div>
-
-            <div class="text-right">
-              <span id="diag-confidence" class="text-lg font-mono font-bold text-emerald-400 block">97.4%
-                Confidence</span>
-              <div class="w-36 bg-slate-800 rounded-full h-2 mt-1.5 overflow-hidden">
-                <div id="diag-confidence-bar" class="bg-emerald-400 h-full rounded-full" style="width: 95%"></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- AI Assessment / Confidence Context -->
-          <div id="diag-assessment-panel"
-            class="hidden my-6 rounded-2xl border border-amber-500/20 bg-amber-950/20 p-5">
-            <div class="flex items-start gap-3">
-              <div
-                class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center shrink-0">
-                <i id="diag-assessment-icon" data-lucide="brain-circuit" class="w-5 h-5 text-amber-400"></i>
-              </div>
-
-              <div class="flex-1 min-w-0">
-                <div class="flex flex-wrap items-center gap-2 mb-2">
-                  <h4 id="diag-assessment-title" class="text-sm font-bold text-amber-300">
-                    AI Assessment
-                  </h4>
-
-                  <span id="diag-health-status-badge"
-                    class="hidden px-2.5 py-1 text-[10px] font-bold rounded-full uppercase tracking-wider border"></span>
-                </div>
-
-                <p id="diag-reasoning-summary" class="text-xs text-slate-300 leading-relaxed"></p>
-
-                <div id="diag-crop-mismatch-warning"
-                  class="hidden mt-3 rounded-xl border border-orange-500/30 bg-orange-950/30 p-3">
-                  <div class="flex items-start gap-2">
-                    <i data-lucide="triangle-alert" class="w-4 h-4 text-orange-400 mt-0.5 shrink-0"></i>
-
-                    <p class="text-xs text-orange-200 leading-relaxed">
-                      <span class="font-bold">Crop mismatch detected.</span>
-                      The uploaded plant may not match the crop you selected.
-                      Verify the crop type before relying on this diagnosis.
-                    </p>
-                  </div>
-                </div>
-
-                <div id="diag-uncertain-warning"
-                  class="hidden mt-3 rounded-xl border border-amber-500/30 bg-amber-950/30 p-3">
-                  <div class="flex items-start gap-2">
-                    <i data-lucide="circle-help" class="w-4 h-4 text-amber-400 mt-0.5 shrink-0"></i>
-
-                    <p class="text-xs text-amber-100 leading-relaxed">
-                      <span class="font-bold">Diagnosis uncertain.</span>
-                      Try another clear, well-lit close-up of the affected area
-                      and consider expert confirmation before treatment.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Symptoms Checklist -->
-          <div class="my-6">
-            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3 flex items-center gap-2">
-              <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-400"></i>
-              <span>Pathological Symptoms Observed</span>
-            </h4>
-            <ul id="diag-symptoms-list" class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
-              <!-- Rendered by JS -->
-            </ul>
-          </div>
-
-          <!-- Remediation Protocols Grid (Organic vs Chemical) -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-6">
-            <!-- Organic -->
-            <div class="glass-card p-5 rounded-2xl border border-emerald-500/20 bg-emerald-950/20">
-              <div class="flex items-center gap-2 text-sm font-bold text-emerald-400 mb-2">
-                <i data-lucide="leaf" class="w-4 h-4"></i>
-                <span>Organic & Biological Solution</span>
-              </div>
-              <p id="diag-organic-treatment" class="text-xs text-slate-300 leading-relaxed"></p>
-            </div>
-
-            <!-- Chemical -->
-            <div class="glass-card p-5 rounded-2xl border border-amber-500/20 bg-amber-950/20">
-              <div class="flex items-center gap-2 text-sm font-bold text-amber-400 mb-2">
-                <i data-lucide="flask-conical" class="w-4 h-4"></i>
-                <span>Targeted Chemical Intervention</span>
-              </div>
-              <p id="diag-chemical-treatment" class="text-xs text-slate-300 leading-relaxed"></p>
-            </div>
-          </div>
-
-          <!-- Embedded YouTube Video Fix Tutorial -->
-          <div id="diag-video-section" class="hidden pt-6 border-t border-white/10">
-            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4 flex items-center gap-2">
-              <i data-lucide="video" class="w-4 h-4 text-red-400"></i>
-              <span>Curated Video Fix Tutorial</span>
-            </h4>
-            <div
-              class="rounded-2xl overflow-hidden border border-white/10 bg-black aspect-video max-w-2xl mx-auto shadow-2xl">
-              <iframe id="diag-youtube-iframe" class="w-full h-full" src="" title="Crop Disease Remediation Video"
-                frameborder="0" allow="
-                    accelerometer;
-                    autoplay;
-                    clipboard-write;
-                    encrypted-media;
-                    gyroscope;
-                    picture-in-picture;
-                  " allowfullscreen></iframe>
-            </div>
-          </div>
-        </div>
+        <div id="ai-result-card" class="hidden mt-8 glass-panel rounded-3xl p-8 border border-emerald-500/30 shadow-2xl"></div>
       </div>
     </div>
   </section>
 
-  <!-- ============================================================== -->
-  <!-- 7. AGRICULTURAL TOOLS & 3D MACHINERY HUB -->
-  <!-- ============================================================== -->
+  <!-- AGRICULTURAL TOOLS & 3D MACHINERY HUB -->
   <section id="machinery" class="relative py-20 z-10">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
         <div>
-          <div
-            class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/50 border border-emerald-500/30 text-emerald-300 text-xs font-semibold mb-3">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/50 border border-emerald-500/30 text-emerald-300 text-xs font-semibold mb-3">
             <i data-lucide="cog" class="w-3.5 h-3.5"></i>
             <span>Farm Mechanization & Tech</span>
           </div>
           <h2 class="text-3xl sm:text-4xl font-black text-white tracking-tight font-['Plus_Jakarta_Sans']">
             Modern Agricultural Machinery & 3D Tools Hub
           </h2>
-          <p class="text-sm text-slate-400 mt-2 max-w-xl">
-            Explore advanced precision drones, laser levelers, IoT solar
-            fertigation controllers, and crawler harvesters with official
-            subsidy financing rates.
-          </p>
-        </div>
-
-        <!-- Filter tabs -->
-        <div class="flex flex-wrap items-center gap-2 bg-slate-900/80 p-1.5 rounded-2xl border border-white/10">
-          <button data-category="all"
-            class="tool-tab-btn px-4 py-2 rounded-xl text-xs font-semibold bg-emerald-600 text-white transition-all">
-            All Tools
-          </button>
-          <button data-category="drone"
-            class="tool-tab-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white/5 text-slate-300 hover:text-white transition-all">
-            Agri-Drones
-          </button>
-          <button data-category="harvester"
-            class="tool-tab-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white/5 text-slate-300 hover:text-white transition-all">
-            Laser Levelers
-          </button>
-          <button data-category="irrigation"
-            class="tool-tab-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white/5 text-slate-300 hover:text-white transition-all">
-            IoT Irrigation
-          </button>
-          <button data-category="tractor"
-            class="tool-tab-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white/5 text-slate-300 hover:text-white transition-all">
-            Mini Combines
-          </button>
         </div>
       </div>
 
-      <!-- Tools Grid -->
-      <div id="tools-grid-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <!-- Rendered by app.js loadMachineryTools() -->
-      </div>
+      <div id="tools-grid-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"></div>
     </div>
   </section>
 
-  <!-- ============================================================== -->
-  <!-- 8. GOVERNMENT SCHEMES & KISAN LOAN PORTALS -->
-  <!-- ============================================================== -->
+  <!-- GOVERNMENT SCHEMES & KISAN LOAN PORTALS -->
   <section id="schemes" class="relative py-20 z-10 border-t border-white/5 bg-slate-950/40">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
         <div>
-          <div
-            class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-950/50 border border-amber-500/30 text-amber-300 text-xs font-semibold mb-3">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-950/50 border border-amber-500/30 text-amber-300 text-xs font-semibold mb-3">
             <i data-lucide="landmark" class="w-3.5 h-3.5"></i>
             <span>Financial Subsidies & Credit</span>
           </div>
           <h2 class="text-3xl sm:text-4xl font-black text-white tracking-tight font-['Plus_Jakarta_Sans']">
             Government Schemes & Kisan Loan Portals
           </h2>
-          <p class="text-sm text-slate-400 mt-2 max-w-xl">
-            Direct access to official DBT income support, 4% concessional
-            Kisan Credit Card credit lines, PM Fasal Bima crop insurance, and
-            solar pump subsidies.
-          </p>
-        </div>
-
-        <!-- Scheme Categories -->
-        <div class="flex flex-wrap items-center gap-2 bg-slate-900/80 p-1.5 rounded-2xl border border-white/10">
-          <button data-category="all"
-            class="scheme-tab-btn px-4 py-2 rounded-xl text-xs font-semibold bg-emerald-600 text-white transition-all">
-            All Schemes
-          </button>
-          <button data-category="central_gov"
-            class="scheme-tab-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white/5 text-slate-300 hover:text-white transition-all">
-            PM-KISAN DBT
-          </button>
-          <button data-category="bank_loan"
-            class="scheme-tab-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white/5 text-slate-300 hover:text-white transition-all">
-            KCC 4% Loans
-          </button>
-          <button data-category="subsidy"
-            class="scheme-tab-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white/5 text-slate-300 hover:text-white transition-all">
-            Solar PM-KUSUM
-          </button>
-          <button data-category="insurance"
-            class="scheme-tab-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white/5 text-slate-300 hover:text-white transition-all">
-            Crop Insurance
-          </button>
         </div>
       </div>
 
-      <!-- Schemes Grid -->
-      <div id="schemes-grid-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <!-- Rendered by app.js loadSchemes() -->
-      </div>
+      <div id="schemes-grid-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
     </div>
   </section>
 
-  <!-- ============================================================== -->
-  <!-- 6. FARMER COMMUNITY & VERIFIED DIRECTORY -->
-  <!-- ============================================================== -->
+  <!-- FARMER COMMUNITY & VERIFIED DIRECTORY -->
   <section id="community" class="relative py-20 z-10">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <!-- Section Header -->
       <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
         <div>
-          <div
-            class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950/50 border border-cyan-500/30 text-cyan-300 text-xs font-semibold mb-3">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950/50 border border-cyan-500/30 text-cyan-300 text-xs font-semibold mb-3">
             <i data-lucide="users" class="w-3.5 h-3.5"></i>
             <span>Farmer Social Network</span>
           </div>
           <h2 class="text-3xl sm:text-4xl font-black text-white tracking-tight font-['Plus_Jakarta_Sans']">
             Progressive Farmer Community & Directory
           </h2>
-          <p class="text-sm text-slate-400 mt-2 max-w-xl">
-            Exchange field insights, discuss real-time pest treatments, post
-            harvest yields, and connect with certified local producers across
-            India.
-          </p>
         </div>
 
-        <button onclick="
-              document
-                .getElementById('new-post-modal')
-                .classList.remove('hidden');
-              document.getElementById('new-post-modal').classList.add('flex');
-            "
-          class="px-5 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-bold rounded-xl shadow-lg transition-all flex items-center gap-2">
-          <i data-lucide="plus-circle" class="w-4 h-4"></i>
-          <span>Share Field Update / Query</span>
-        </button>
+        <div class="flex items-center gap-3">
+          <button onclick="window.openUploadProgressModal()"
+            class="px-4 py-3 bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 text-white text-xs font-bold rounded-xl shadow-lg transition-all flex items-center gap-2">
+            <i data-lucide="upload-cloud" class="w-4 h-4"></i>
+            <span>Post Field Progress</span>
+          </button>
+          
+          <button onclick="document.getElementById('new-post-modal').classList.remove('hidden'); document.getElementById('new-post-modal').classList.add('flex');"
+            class="px-5 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-bold rounded-xl shadow-lg transition-all flex items-center gap-2">
+            <i data-lucide="plus-circle" class="w-4 h-4"></i>
+            <span>Share Field Update / Query</span>
+          </button>
+        </div>
       </div>
 
-      <!-- Community Feed Filter Tabs -->
-      <div
-        class="flex flex-wrap items-center gap-2 mb-8 bg-slate-900/60 p-1.5 rounded-2xl border border-white/10 max-w-xl">
-        <button data-category="all"
-          class="community-filter-btn px-4 py-2 rounded-xl text-xs font-semibold bg-emerald-600 text-white transition-all">
-          All Posts
-        </button>
-        <button data-category="growth_update"
-          class="community-filter-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white/5 text-slate-300 hover:text-white transition-all">
-          Field Updates
-        </button>
-        <button data-category="query"
-          class="community-filter-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white/5 text-slate-300 hover:text-white transition-all">
-          Pest Queries
-        </button>
-        <button data-category="harvest"
-          class="community-filter-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white/5 text-slate-300 hover:text-white transition-all">
-          Harvest Milestones
-        </button>
-      </div>
+      <div id="community-feed-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-20"></div>
 
-      <!-- Feed Grid -->
-      <div id="community-feed-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
-        <!-- Rendered by community.js loadCommunityPosts() -->
-      </div>
-
-      <!-- Public Verified Farmers Directory Sub-section -->
       <div class="pt-16 border-t border-white/10">
-        <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
-          <div>
-            <h3
-              class="text-2xl font-black text-white tracking-tight font-['Plus_Jakarta_Sans'] flex items-center gap-2">
-              <i data-lucide="badge-check" class="w-6 h-6 text-emerald-400"></i>
-              <span>Registered Verified Farmers Directory</span>
-            </h3>
-            <p class="text-xs text-slate-400 mt-1">
-              Directly connect with local growers and progressive crop
-              practitioners
-            </p>
-          </div>
-
-          <div class="w-full md:w-72">
-            <input type="text" id="farmer-search-input" placeholder="Search by state or crop..."
-              class="w-full glass-input rounded-xl px-4 py-2.5 text-xs text-white border border-white/10" />
-          </div>
-        </div>
-
-        <div id="farmers-directory-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <!-- Rendered by community.js loadFarmersDirectory() -->
-        </div>
+        <div id="farmers-directory-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
       </div>
     </div>
   </section>
 
-  <!-- ============================================================== -->
   <!-- MODALS -->
-  <!-- ============================================================== -->
-
-  <!-- 1. Crop Step-by-Step Workflow Modal -->
-  <div id="crop-workflow-modal"
-    class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden items-center justify-center p-4">
-    <div
-      class="glass-panel rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-y-auto border border-emerald-500/30 p-6 sm:p-8 relative">
-      <button onclick="window.closeCropWorkflowModal()"
-        class="absolute top-6 right-6 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
-        aria-label="Close">
+  <!-- Farmer Profile Modal -->
+  <div id="farmer-profile-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden items-center justify-center p-4">
+    <div class="glass-panel rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-emerald-500/30 p-6 sm:p-8 relative">
+      <button onclick="window.closeFarmerProfileModal()" class="absolute top-6 right-6 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all">
         <i data-lucide="x" class="w-5 h-5"></i>
       </button>
 
-      <div class="mb-6">
-        <span id="workflow-modal-season"
-          class="text-xs font-bold uppercase tracking-wider text-emerald-400 block mb-1"></span>
-        <h3 id="workflow-modal-title" class="text-2xl font-black text-white font-['Plus_Jakarta_Sans']"></h3>
+      <div class="flex flex-col sm:flex-row items-center gap-5 border-b border-white/10 pb-6 mb-6">
+        <img id="profile-avatar" src="https://api.dicebear.com/7.x/bottts/svg?seed=1" alt="Farmer Avatar" class="w-20 h-20 rounded-2xl object-cover border-2 border-emerald-400 shadow-lg" />
+        <div class="text-center sm:text-left">
+          <h3 id="profile-name" class="text-xl font-bold text-white">Farmer Name</h3>
+          <p class="text-xs text-emerald-400 flex items-center justify-center sm:justify-start gap-1 mt-1">
+            <i data-lucide="map-pin" class="w-3.5 h-3.5"></i> <span id="profile-location-text">Location</span>
+          </p>
+          <p class="text-xs text-slate-300 mt-1">Primary Crops: <span id="profile-crop-text" class="font-semibold text-amber-300">Paddy, Wheat</span></p>
+          <p id="profile-bio-text" class="text-xs text-slate-400 mt-2 italic">"Bio description..."</p>
+        </div>
       </div>
 
-      <!-- Step-by-step Timeline Roadmap -->
-      <div id="workflow-timeline-steps" class="mb-8">
-        <!-- Rendered by JS -->
-      </div>
-
-      <!-- Embedded Video Tutorial -->
-      <div id="workflow-video-container" class="mt-6 pt-6 border-t border-white/10"></div>
-    </div>
-  </div>
-
-  <!-- 2. Video Player Modal for Demos -->
-  <div id="video-modal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden items-center justify-center p-4">
-    <div class="glass-panel rounded-3xl max-w-4xl w-full border border-emerald-500/30 p-6 relative">
-      <div class="flex items-center justify-between pb-4 mb-4 border-b border-white/10">
-        <h4 id="video-modal-title" class="text-base font-bold text-white">
-          Video Demonstration
+      <div>
+        <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-4 flex items-center gap-2">
+          <i data-lucide="sprout" class="w-4 h-4 text-emerald-400"></i> Field & Crop Progress Specimen Updates
         </h4>
-        <button onclick="window.closeVideoModal()"
-          class="p-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors" aria-label="Close">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
-      </div>
-      <div class="aspect-video w-full rounded-2xl overflow-hidden bg-black shadow-2xl">
-        <iframe id="video-modal-iframe" class="w-full h-full" src="" frameborder="0" allow="
-              accelerometer;
-              autoplay;
-              clipboard-write;
-              encrypted-media;
-              gyroscope;
-              picture-in-picture;
-            " allowfullscreen></iframe>
+
+        <div id="profile-posts-container" class="space-y-4"></div>
       </div>
     </div>
   </div>
 
-  <!-- 3. New Community Post Modal -->
-  <div id="new-post-modal"
-    class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden items-center justify-center p-4">
-    <div class="glass-panel rounded-3xl max-w-lg w-full border border-emerald-500/30 p-6 relative">
-      <div class="flex items-center justify-between pb-4 mb-4 border-b border-white/10">
-        <h4 class="text-base font-bold text-white">
-          Publish Field Update to Community
-        </h4>
-        <button onclick="
-              document.getElementById('new-post-modal').classList.add('hidden');
-              document
-                .getElementById('new-post-modal')
-                .classList.remove('flex');
-            " class="p-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
+  <!-- Upload Progress Modal -->
+  <div id="upload-progress-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden items-center justify-center p-4">
+    <div class="glass-panel rounded-3xl max-w-lg w-full border border-emerald-500/30 p-6 sm:p-8 relative">
+      <button onclick="window.closeUploadProgressModal()" class="absolute top-6 right-6 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div class="mb-5">
+        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+          <i data-lucide="upload-cloud" class="w-5 h-5 text-emerald-400"></i> Post Field Progress
+        </h3>
+        <p class="text-xs text-slate-400 mt-1">Share photos, videos, or text notes of your crop progress with the Kisan network.</p>
       </div>
 
-      <form id="new-post-form" class="space-y-4">
+      <form id="upload-progress-form" class="space-y-4" enctype="multipart/form-data">
         <div>
-          <label class="block text-xs font-semibold text-slate-300 mb-1">Your Name / Farm</label>
-          <input type="text" name="author_name" placeholder="e.g. Gurpreet Singh (Ludhiana)"
-            class="w-full glass-input rounded-xl px-4 py-2.5 text-xs text-white" />
+          <label class="block text-xs font-semibold text-slate-300 mb-2">Progress Update Note</label>
+          <textarea id="progress-text-input" rows="3" placeholder="e.g. Applied organic fertilizer today. Crop showing healthy growth!" class="w-full glass-input rounded-xl p-3 text-xs text-white bg-slate-900 border border-white/10 focus:outline-none focus:border-emerald-400 resize-none"></textarea>
         </div>
+
         <div>
-          <label class="block text-xs font-semibold text-slate-300 mb-1">Discussion Category</label>
-          <select name="category" class="w-full glass-input rounded-xl px-4 py-2.5 text-xs bg-slate-900 text-white">
-            <option value="growth_update">Field Growth Update</option>
-            <option value="query">Pest / Pathology Query</option>
-            <option value="harvest">Harvest & Yield Report</option>
-            <option value="machinery">Machinery & Technology Review</option>
-          </select>
+          <label class="block text-xs font-semibold text-slate-300 mb-2">Upload Photo / Field Video</label>
+          <input type="file" id="progress-media-input" accept="image/*,video/*" class="w-full text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-600 file:text-white hover:file:bg-emerald-500 cursor-pointer" />
         </div>
-        <div>
-          <label class="block text-xs font-semibold text-slate-300 mb-1">Post Title *</label>
-          <input type="text" name="title" required placeholder="Concise headline for fellow farmers..."
-            class="w-full glass-input rounded-xl px-4 py-2.5 text-xs text-white" />
-        </div>
-        <div>
-          <label class="block text-xs font-semibold text-slate-300 mb-1">Detailed Findings / Question *</label>
-          <textarea name="content" required rows="4"
-            placeholder="Describe soil symptoms, fertilizer doses, variety details..."
-            class="w-full glass-input rounded-xl px-4 py-2.5 text-xs text-white"></textarea>
-        </div>
-        <div>
-          <label class="block text-xs font-semibold text-slate-300 mb-1">Attach Field Photo (Optional)</label>
-          <input type="file" name="image" accept="image/*"
-            class="w-full text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-600 file:text-white hover:file:bg-emerald-500" />
-        </div>
-        <button type="submit"
-          class="w-full py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs rounded-xl shadow-lg transition-all">
-          Post Update
+
+        <button type="submit" id="btn-submit-progress" class="w-full py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs rounded-xl shadow-lg transition-all flex items-center justify-center gap-2">
+          <i data-lucide="send" class="w-4 h-4"></i>
+          <span>Publish Field Progress</span>
         </button>
       </form>
     </div>
   </div>
 
-  <!-- 4. Multi-Role Auth Modal (Login / Register) -->
+  <div id="crop-workflow-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden items-center justify-center p-4">
+    <div class="glass-panel rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-y-auto border border-emerald-500/30 p-6 sm:p-8 relative">
+      <button onclick="window.closeCropWorkflowModal()" class="absolute top-6 right-6 p-2 rounded-full bg-white/10 text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+      <div id="workflow-timeline-steps"></div>
+    </div>
+  </div>
+
+  <div id="video-modal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden items-center justify-center p-4">
+    <div class="glass-panel rounded-3xl max-w-4xl w-full border border-emerald-500/30 p-6 relative">
+      <button onclick="window.closeVideoModal()" class="p-1.5 rounded-full bg-white/10 text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+      <div class="aspect-video w-full rounded-2xl overflow-hidden bg-black shadow-2xl">
+        <iframe id="video-modal-iframe" class="w-full h-full" src="" frameborder="0" allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+
+  <div id="new-post-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden items-center justify-center p-4">
+    <div class="glass-panel rounded-3xl max-w-lg w-full border border-emerald-500/30 p-6 relative">
+      <button onclick="document.getElementById('new-post-modal').classList.add('hidden');" class="p-1.5 rounded-full bg-white/10 text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+      <form id="new-post-form" class="space-y-4"></form>
+    </div>
+  </div>
+
+  <!-- AUTHENTICATION MODAL -->
   <div id="auth-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden items-center justify-center p-4">
     <div class="glass-panel rounded-3xl max-w-md w-full border border-emerald-500/30 p-6 sm:p-8 relative">
-      <button onclick="window.closeAuthModal()"
-        class="absolute top-6 right-6 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors">
+      <button onclick="window.closeAuthModal()" class="absolute top-6 right-6 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all">
         <i data-lucide="x" class="w-5 h-5"></i>
       </button>
 
       <div class="text-center mb-6">
         <span class="text-2xl">🌾</span>
         <h3 class="text-xl font-bold text-white mt-1">Kisan Portal Access</h3>
-        <p class="text-xs text-slate-400">
-          Join India's advanced agricultural community
-        </p>
+        <p class="text-xs text-slate-400 mt-1">Sign in to your account or create a new farmer profile</p>
       </div>
 
-      <!-- Form Tabs -->
-      <div class="flex border-b border-white/10 mb-6">
-        <button id="tab-auth-login"
-          class="flex-1 pb-3 text-xs font-bold border-b-2 border-emerald-400 text-emerald-400 transition-colors">
+      <!-- Auth Tabs -->
+      <div class="flex items-center gap-2 p-1 bg-slate-900 rounded-xl mb-6 border border-white/10">
+        <button id="tab-login" onclick="switchAuthTab('login')" class="flex-1 py-2 text-xs font-bold rounded-lg bg-emerald-600 text-white transition-all">
           Sign In
         </button>
-        <button id="tab-auth-register"
-          class="flex-1 pb-3 text-xs font-bold border-b-2 border-transparent text-slate-400 hover:text-white transition-colors">
-          Register New Account
+        <button id="tab-register" onclick="switchAuthTab('register')" class="flex-1 py-2 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition-all">
+          Register
         </button>
       </div>
 
-      <!-- Login Form -->
+      <!-- Sign In Form -->
       <form id="form-auth-login" class="space-y-4">
         <div>
           <label class="block text-xs font-semibold text-slate-300 mb-1">Email Address</label>
-          <input type="email" id="login-email" required placeholder="farmer@kisan.org"
-            class="w-full glass-input rounded-xl px-4 py-2.5 text-xs text-white" />
+          <input type="email" name="email" required placeholder="farmer@kisan.com" class="w-full glass-input rounded-xl px-4 py-3 text-xs text-white bg-slate-900 border border-white/10 focus:outline-none focus:border-emerald-400" />
         </div>
+
         <div>
           <label class="block text-xs font-semibold text-slate-300 mb-1">Password</label>
-          <input type="password" id="login-password" required placeholder="••••••••"
-            class="w-full glass-input rounded-xl px-4 py-2.5 text-xs text-white" />
+          <input type="password" name="password" required placeholder="••••••••" class="w-full glass-input rounded-xl px-4 py-3 text-xs text-white bg-slate-900 border border-white/10 focus:outline-none focus:border-emerald-400" />
         </div>
-        <button type="submit"
-          class="w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow-lg transition-all">
-          Sign In to Portal
+
+        <button type="submit" class="w-full py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs rounded-xl shadow-lg transition-all flex items-center justify-center gap-2">
+          <i data-lucide="log-in" class="w-4 h-4"></i>
+          <span>Sign In to Account</span>
         </button>
       </form>
 
-      <!-- Register Form -->
+      <!-- Registration Form -->
       <form id="form-auth-register" class="space-y-3 hidden">
         <div>
           <label class="block text-xs font-semibold text-slate-300 mb-1">Full Name</label>
-          <input type="text" id="reg-name" required placeholder="e.g. Ramesh Chandra"
-            class="w-full glass-input rounded-xl px-3 py-2 text-xs text-white" />
+          <input type="text" name="name" required placeholder="Ramesh Kumar" class="w-full glass-input rounded-xl px-3.5 py-2.5 text-xs text-white bg-slate-900 border border-white/10 focus:outline-none focus:border-emerald-400" />
         </div>
-        <div class="grid grid-cols-2 gap-2">
-          <div>
-            <label class="block text-xs font-semibold text-slate-300 mb-1">Email</label>
-            <input type="email" id="reg-email" required placeholder="name@email.com"
-              class="w-full glass-input rounded-xl px-3 py-2 text-xs text-white" />
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-slate-300 mb-1">Role</label>
-            <select id="reg-role" class="w-full glass-input rounded-xl px-3 py-2 text-xs bg-slate-900 text-white">
-              <option value="farmer">Farmer</option>
-              <option value="buyer">Produce Buyer</option>
-              <option value="admin">Agro-Expert</option>
-            </select>
-          </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Email Address</label>
+          <input type="email" name="email" required placeholder="ramesh@kisan.com" class="w-full glass-input rounded-xl px-3.5 py-2.5 text-xs text-white bg-slate-900 border border-white/10 focus:outline-none focus:border-emerald-400" />
         </div>
+
         <div>
           <label class="block text-xs font-semibold text-slate-300 mb-1">Password</label>
-          <input type="password" id="reg-password" required placeholder="Minimum 6 characters"
-            class="w-full glass-input rounded-xl px-3 py-2 text-xs text-white" />
+          <input type="password" name="password" required placeholder="••••••••" class="w-full glass-input rounded-xl px-3.5 py-2.5 text-xs text-white bg-slate-900 border border-white/10 focus:outline-none focus:border-emerald-400" />
         </div>
-        <div class="grid grid-cols-2 gap-2">
+
+        <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block text-xs font-semibold text-slate-300 mb-1">State</label>
-            <input type="text" id="reg-state" placeholder="e.g. Punjab"
-              class="w-full glass-input rounded-xl px-3 py-2 text-xs text-white" />
+            <input type="text" name="state" placeholder="West Bengal" class="w-full glass-input rounded-xl px-3.5 py-2.5 text-xs text-white bg-slate-900 border border-white/10 focus:outline-none focus:border-emerald-400" />
           </div>
           <div>
             <label class="block text-xs font-semibold text-slate-300 mb-1">District</label>
-            <input type="text" id="reg-district" placeholder="e.g. Ludhiana"
-              class="w-full glass-input rounded-xl px-3 py-2 text-xs text-white" />
+            <input type="text" name="district" placeholder="Kolkata" class="w-full glass-input rounded-xl px-3.5 py-2.5 text-xs text-white bg-slate-900 border border-white/10 focus:outline-none focus:border-emerald-400" />
           </div>
         </div>
-        <div class="grid grid-cols-2 gap-2">
-          <div>
-            <label class="block text-xs font-semibold text-slate-300 mb-1">Holding (Acres)</label>
-            <input type="number" id="reg-acres" step="0.5" placeholder="10.5"
-              class="w-full glass-input rounded-xl px-3 py-2 text-xs text-white" />
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-slate-300 mb-1">Primary Crops</label>
-            <input type="text" id="reg-crops" placeholder="Wheat, Rice"
-              class="w-full glass-input rounded-xl px-3 py-2 text-xs text-white" />
-          </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Farm Size (Acres)</label>
+          <input type="number" step="0.1" name="farm_size_acres" placeholder="3.5" class="w-full glass-input rounded-xl px-3.5 py-2.5 text-xs text-white bg-slate-900 border border-white/10 focus:outline-none focus:border-emerald-400" />
         </div>
-        <button type="submit"
-          class="w-full py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs rounded-xl shadow-lg transition-all mt-2">
-          Create Kisan Account
+
+        <button type="submit" class="w-full py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 mt-2">
+          <i data-lucide="user-plus" class="w-4 h-4"></i>
+          <span>Create Farmer Profile</span>
         </button>
       </form>
     </div>
   </div>
 
-  <!-- ============================================================== -->
   <!-- FOOTER -->
-  <!-- ============================================================== -->
   <footer class="border-t border-white/10 bg-slate-950/80 py-12 relative z-10">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
       <div class="flex items-center gap-3">
         <span class="text-2xl">🌾</span>
         <div>
           <span class="text-sm font-bold text-white">Kisan Web Project</span>
-          <p class="text-xs text-slate-500">
-            Production Full-Stack 3D Agricultural Operating System
-          </p>
         </div>
       </div>
-
-      <div class="flex items-center gap-6 text-xs text-slate-400">
-        <a href="#weather" class="hover:text-emerald-400 transition-colors">Weather Telemetry</a>
-        <a href="#crops" class="hover:text-emerald-400 transition-colors">Seasonal Crops</a>
-        <a href="#ai-diagnostics" class="hover:text-emerald-400 transition-colors">AI Leaf Doctor</a>
-        <a href="#schemes" class="hover:text-emerald-400 transition-colors">Kisan Portals</a>
-      </div>
-
-      <p class="text-xs text-slate-500">
-        &copy; 2026 Kisan Project. Engineered with Flask, Three.js &
-        PostgreSQL.
-      </p>
+      <p class="text-xs text-slate-500">&copy; 2026 Kisan Project. Engineered with Flask & PostgreSQL.</p>
     </div>
   </footer>
 
-  <!-- Scripts -->
+  <!-- Core Scripts -->
   <script src="/static/js/three_hero.js"></script>
   <script src="/static/js/tilt3d.js"></script>
   <script src="/static/js/carousel3d.js"></script>
@@ -1710,7 +1013,136 @@
   <script src="/static/js/community.js"></script>
   <script src="/static/js/app.js"></script>
 
-  <!-- KISAAN AI Assistant: language selection + text/image/video chat -->
+  <!-- USER DRAWER TOGGLE SCRIPT -->
+  <script>
+    function toggleUserDrawer() {
+      const drawer = document.getElementById('left-user-drawer');
+      const overlay = document.getElementById('drawer-overlay');
+      drawer.classList.toggle('-translate-x-full');
+      overlay.classList.toggle('hidden');
+    }
+  </script>
+
+  <!-- AUTH MODAL HANDLER SCRIPT -->
+  <script>
+    function openAuthModal() {
+      const modal = document.getElementById('auth-modal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+    }
+
+    function closeAuthModal() {
+      const modal = document.getElementById('auth-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    function switchAuthTab(tab) {
+      const loginForm = document.getElementById('form-auth-login');
+      const registerForm = document.getElementById('form-auth-register');
+      const loginTab = document.getElementById('tab-login');
+      const registerTab = document.getElementById('tab-register');
+
+      if (tab === 'login') {
+        loginForm.classList.remove('hidden');
+        registerForm.classList.add('hidden');
+        loginTab.className = "flex-1 py-2 text-xs font-bold rounded-lg bg-emerald-600 text-white transition-all";
+        registerTab.className = "flex-1 py-2 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition-all";
+      } else {
+        loginForm.classList.add('hidden');
+        registerForm.classList.remove('hidden');
+        registerTab.className = "flex-1 py-2 text-xs font-bold rounded-lg bg-emerald-600 text-white transition-all";
+        loginTab.className = "flex-1 py-2 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition-all";
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      // Registration Submit Handler
+      const registerForm = document.getElementById('form-auth-register');
+      if (registerForm) {
+        registerForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const submitBtn = registerForm.querySelector('button[type="submit"]');
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = `<span>Registering...</span>`;
+
+          const formData = new FormData(registerForm);
+          const payload = Object.fromEntries(formData.entries());
+
+          try {
+            const res = await fetch('/api/auth/register', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+
+            if (res.ok) {
+              alert(data.message || 'Farmer profile registered successfully!');
+              closeAuthModal();
+              registerForm.reset();
+              if (window.loadFarmersDirectory) window.loadFarmersDirectory();
+            } else {
+              alert(data.error || 'Registration failed. Please try again.');
+            }
+          } catch (err) {
+            alert('Server connection error. Please try again.');
+          } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = `<i data-lucide="user-plus" class="w-4 h-4"></i><span>Create Farmer Profile</span>`;
+            if (window.lucide) window.lucide.createIcons();
+          }
+        });
+      }
+
+      // Login Submit Handler
+      const loginForm = document.getElementById('form-auth-login');
+      if (loginForm) {
+        loginForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const submitBtn = loginForm.querySelector('button[type="submit"]');
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = `<span>Signing in...</span>`;
+
+          const formData = new FormData(loginForm);
+          const payload = Object.fromEntries(formData.entries());
+
+          try {
+            const res = await fetch('/api/auth/login', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+
+            if (res.ok) {
+              alert(`Welcome back, ${data.user ? data.user.name : 'Kisan'}!`);
+              closeAuthModal();
+              loginForm.reset();
+            } else {
+              alert(data.error || 'Invalid credentials.');
+            }
+          } catch (err) {
+            alert('Server connection error. Please try again.');
+          } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = `<i data-lucide="log-in" class="w-4 h-4"></i><span>Sign In to Account</span>`;
+            if (window.lucide) window.lucide.createIcons();
+          }
+        });
+      }
+    });
+
+    window.openAuthModal = openAuthModal;
+    window.closeAuthModal = closeAuthModal;
+    window.switchAuthTab = switchAuthTab;
+  </script>
+
+  <!-- KISAAN AI ASSISTANT FUNCTIONALITY -->
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const languagePanel = document.getElementById("assistant-language-panel");
@@ -1756,7 +1188,6 @@
         if (imageUrl) {
           const img = document.createElement("img");
           img.src = imageUrl;
-          img.alt = "Uploaded image";
           img.className = "max-w-full sm:max-w-[280px] max-h-56 object-contain rounded-xl border border-white/10 mb-2 bg-black/20";
           bubble.appendChild(img);
         }
@@ -1764,7 +1195,6 @@
           const video = document.createElement("video");
           video.src = videoUrl;
           video.controls = true;
-          video.preload = "metadata";
           video.className = "max-w-full sm:max-w-[320px] max-h-56 rounded-xl border border-white/10 mb-2 bg-black/20";
           bubble.appendChild(video);
         }
@@ -1778,30 +1208,6 @@
         messages.scrollTop = messages.scrollHeight;
       }
 
-      function showThinkingIndicator() {
-        const row = document.createElement("div");
-        row.id = "assistant-thinking-indicator";
-        row.className = "flex justify-start";
-        const bubble = document.createElement("div");
-        bubble.className = "max-w-[85%] sm:max-w-[75%] rounded-2xl rounded-bl-md bg-slate-800/90 border border-white/10 px-4 py-3 text-sm text-slate-100 flex items-center gap-3";
-        const spinner = document.createElement("span");
-        spinner.className = "inline-block w-5 h-5 rounded-full border-2 border-slate-500 border-t-violet-400 animate-spin shrink-0";
-        spinner.setAttribute("aria-hidden", "true");
-        const label = document.createElement("span");
-        label.className = "text-slate-300";
-        label.textContent = selectedLanguage === "Hindi" ? "उत्तर तैयार किया जा रहा है..." : selectedLanguage === "Bengali" ? "উত্তর তৈরি করা হচ্ছে..." : "Generating response...";
-        bubble.appendChild(spinner);
-        bubble.appendChild(label);
-        row.appendChild(bubble);
-        messages.appendChild(row);
-        messages.scrollTop = messages.scrollHeight;
-      }
-
-      function removeThinkingIndicator() {
-        const indicator = document.getElementById("assistant-thinking-indicator");
-        if (indicator) indicator.remove();
-      }
-
       function clearSelectedAttachment() {
         selectedImage = null;
         selectedVideo = null;
@@ -1810,7 +1216,6 @@
         videoPreview.classList.add("hidden");
         imagePreviewImg.src = "";
         videoPreviewVideo.removeAttribute("src");
-        videoPreviewVideo.load();
         imageName.textContent = "";
         videoName.textContent = "";
         if (previewUrl) URL.revokeObjectURL(previewUrl);
@@ -1846,7 +1251,6 @@
           videoName.textContent = file.name;
           videoPreview.classList.remove("hidden");
         }
-
         if (window.lucide) window.lucide.createIcons();
       });
 
@@ -1869,14 +1273,19 @@
         if (window.lucide) window.lucide.createIcons();
       }
 
-      languageButtons.forEach((button) => button.addEventListener("click", () => openChat(button.dataset.assistantLanguage)));
+      languageButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const lang = button.getAttribute("data-assistant-language");
+          if (lang) openChat(lang);
+        });
+      });
+
       changeLanguageButton.addEventListener("click", () => {
         selectedLanguage = null;
         messages.innerHTML = "";
         clearSelectedAttachment();
         chatPanel.classList.add("hidden");
         languagePanel.classList.remove("hidden");
-        languagePanel.scrollIntoView({ behavior: "smooth", block: "center" });
       });
 
       chatForm.addEventListener("submit", async (event) => {
@@ -1889,21 +1298,11 @@
         const bubbleImageUrl = imageToSend ? URL.createObjectURL(imageToSend) : null;
         const bubbleVideoUrl = videoToSend ? URL.createObjectURL(videoToSend) : null;
         addMessage(message, "user", bubbleImageUrl, bubbleVideoUrl);
-        if (bubbleImageUrl) setTimeout(() => URL.revokeObjectURL(bubbleImageUrl), 1000);
-        if (bubbleVideoUrl) setTimeout(() => URL.revokeObjectURL(bubbleVideoUrl), 60000);
         messageInput.value = "";
         clearSelectedAttachment();
         waitingForReply = true;
         sendButton.disabled = true;
         imageButton.disabled = true;
-        sendButton.classList.add("opacity-50", "cursor-not-allowed");
-        imageButton.classList.add("opacity-50", "cursor-not-allowed");
-        status.textContent = videoToSend
-          ? "KISAAN AI is analyzing the video..."
-          : imageToSend
-            ? "KISAAN AI is analyzing the image..."
-            : "KISAAN AI is thinking...";
-        showThinkingIndicator();
 
         try {
           let response;
@@ -1927,31 +1326,29 @@
             });
           }
           const data = await response.json();
-          if (!response.ok) throw new Error(data.error || "The assistant request failed.");
-          removeThinkingIndicator();
-          addMessage(data.response || "No response was returned.", "assistant");
-          status.textContent = "Gemini AI • Text + image + video chat";
+          addMessage(data.response || "No response received.", "assistant");
         } catch (error) {
-          removeThinkingIndicator();
-          console.error("KISAAN AI Assistant error:", error);
-          addMessage(selectedLanguage === "Hindi" ? "AI से संपर्क नहीं हो सका। कृपया अपनी Gemini API Key की जाँच करें।" : selectedLanguage === "Bengali" ? "AI-এর সাথে সংযোগ তৈরি করা যায়নি। অনুগ্রহ করে আপনার Gemini API Key পরীক্ষা করুন।" : "Could not connect to the AI. Please make sure your Gemini API Key is configured.", "assistant");
-          status.textContent = "Connection error";
+          addMessage("Connection error. Please check your API key.", "assistant");
         } finally {
-          removeThinkingIndicator();
           waitingForReply = false;
           sendButton.disabled = false;
           imageButton.disabled = false;
-          sendButton.classList.remove("opacity-50", "cursor-not-allowed");
-          imageButton.classList.remove("opacity-50", "cursor-not-allowed");
-          messageInput.focus();
         }
-      });
-
-      messageInput.addEventListener("keydown", (event) => {
-        if (event.key === "Enter" && !event.shiftKey) { event.preventDefault(); chatForm.requestSubmit(); }
       });
     });
   </script>
+
+  <!-- GOOGLE TRANSLATE SCRIPT INITIALIZER -->
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        includedLanguages: 'en,hi,bn,te,mr,ta,ur,gu,kn,ml,pa',
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+      }, 'google_translate_element');
+    }
+  </script>
+  <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
   <!-- Lucide Icons Rendering -->
   <script>

@@ -1,6 +1,6 @@
 """
 Kisan Web Project - PostgreSQL / Relational Database Models
-Includes models for Users, Crops, DiseaseLogs, WeatherCache, CommunityPosts, Schemes, and AgriculturalTools.
+Includes models for Users, Crops, DiseaseLogs, WeatherCache, CommunityPosts, FarmerPosts, Schemes, and AgriculturalTools.
 """
 from datetime import datetime, timezone
 import json
@@ -24,11 +24,13 @@ class User(db.Model):
     farm_size_acres = db.Column(db.Float, default=0.0)
     primary_crops = db.Column(db.String(255), nullable=True)  # Comma separated
     avatar_url = db.Column(db.String(255), nullable=True)
+    bio = db.Column(db.Text, nullable=True)
     is_verified = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
 
     # Relationships
     posts = db.relationship('CommunityPost', backref='author', lazy='dynamic', cascade='all, delete-orphan')
+    farmer_posts = db.relationship('FarmerPost', backref='farmer', lazy='dynamic', cascade='all, delete-orphan')
     disease_logs = db.relationship('DiseaseLog', backref='farmer', lazy='dynamic', cascade='all, delete-orphan')
 
     def set_password(self, password):
@@ -41,7 +43,7 @@ class User(db.Model):
 
     def to_dict(self, include_sensitive=False):
         """Serialize user object to dictionary."""
-        data = {
+        return {
             'id': self.id,
             'name': self.name,
             'email': self.email,
@@ -54,10 +56,32 @@ class User(db.Model):
             'farm_size_acres': self.farm_size_acres,
             'primary_crops': [c.strip() for c in self.primary_crops.split(',')] if self.primary_crops else [],
             'avatar_url': self.avatar_url or f"https://api.dicebear.com/7.x/bottts/svg?seed={self.id}",
+            'bio': self.bio or "Progressive Kisan sharing real-time field progress.",
             'is_verified': self.is_verified,
             'created_at': self.created_at.isoformat() if self.created_at else None
         }
-        return data
+
+
+class FarmerPost(db.Model):
+    """Specific field and crop progress posts created by logged-in farmers."""
+    __tablename__ = 'farmer_posts'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
+    text_content = db.Column(db.Text, nullable=True)
+    media_url = db.Column(db.String(255), nullable=True)
+    media_type = db.Column(db.String(20), nullable=True)  # 'image' or 'video'
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'text': self.text_content,
+            'media_url': self.media_url,
+            'media_type': self.media_type,
+            'created_at': self.created_at.strftime('%b %d, %Y') if self.created_at else None
+        }
 
 
 class Crop(db.Model):
@@ -71,21 +95,16 @@ class Crop(db.Model):
     crop_category = db.Column(db.String(50), default='cereal')    # 'cereal', 'pulses', 'vegetable', 'cash_crop'
     growth_duration_days = db.Column(db.Integer, default=120)
 
-    # Climate & Soil suitability parameters
     ideal_temp_min = db.Column(db.Float, default=18.0)
     ideal_temp_max = db.Column(db.Float, default=32.0)
-    ideal_rainfall_min = db.Column(db.Float, default=50.0)  # mm per month
+    ideal_rainfall_min = db.Column(db.Float, default=50.0)
     ideal_rainfall_max = db.Column(db.Float, default=150.0)
     soil_type = db.Column(db.String(100), default='Alluvial, Loamy')
     ph_min = db.Column(db.Float, default=6.0)
     ph_max = db.Column(db.Float, default=7.5)
 
-    # Farming workflow steps stored as JSON string
-    # E.g. [{"step": 1, "title": "Soil Preparation", "desc": "Plough 2-3 times..."}, ...]
     workflow_steps_json = db.Column(db.Text, nullable=True)
-
-    # Recommendations & Media
-    hybrid_varieties = db.Column(db.Text, nullable=True)  # e.g. "HD-2967, PBW-550"
+    hybrid_varieties = db.Column(db.Text, nullable=True)
     youtube_tutorial_id = db.Column(db.String(50), nullable=True)
     image_url = db.Column(db.String(255), nullable=True)
     estimated_yield_per_acre = db.Column(db.String(100), nullable=True)
@@ -93,7 +112,6 @@ class Crop(db.Model):
 
     @property
     def workflow_steps(self):
-        """Parse workflow JSON."""
         if not self.workflow_steps_json:
             return []
         try:
@@ -103,7 +121,6 @@ class Crop(db.Model):
 
     @workflow_steps.setter
     def workflow_steps(self, steps_list):
-        """Set workflow JSON."""
         self.workflow_steps_json = json.dumps(steps_list)
 
     def to_dict(self):
@@ -141,7 +158,7 @@ class DiseaseLog(db.Model):
     image_path = db.Column(db.String(255), nullable=False)
     disease_name = db.Column(db.String(150), nullable=False)
     confidence = db.Column(db.Float, default=94.5)
-    severity = db.Column(db.String(30), default='Medium')  # 'Low', 'Medium', 'High', 'Critical'
+    severity = db.Column(db.String(30), default='Medium')
     symptoms_json = db.Column(db.Text, nullable=True)
     organic_treatment = db.Column(db.Text, nullable=True)
     chemical_treatment = db.Column(db.Text, nullable=True)
@@ -233,7 +250,7 @@ class CommunityPost(db.Model):
     author_location = db.Column(db.String(120), default='India')
     title = db.Column(db.String(200), nullable=False)
     content = db.Column(db.Text, nullable=False)
-    category = db.Column(db.String(50), default='growth_update')  # 'growth_update', 'query', 'harvest', 'machinery'
+    category = db.Column(db.String(50), default='growth_update')
     media_url = db.Column(db.String(255), nullable=True)
     likes_count = db.Column(db.Integer, default=0)
     comments_count = db.Column(db.Integer, default=0)
@@ -261,12 +278,12 @@ class Scheme(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), nullable=False)
-    category = db.Column(db.String(50), default='central_gov')  # 'central_gov', 'bank_loan', 'subsidy', 'insurance'
+    category = db.Column(db.String(50), default='central_gov')
     provider_name = db.Column(db.String(150), nullable=False)
     description = db.Column(db.Text, nullable=False)
     eligibility = db.Column(db.Text, nullable=False)
     benefits = db.Column(db.Text, nullable=False)
-    interest_rate_subsidy = db.Column(db.String(100), nullable=True)
+    interest_rate_subsidy = db.Column(db.Text, nullable=True)
     application_url = db.Column(db.String(255), nullable=True)
     badge_label = db.Column(db.String(50), default='Active')
 
@@ -291,7 +308,7 @@ class AgriculturalTool(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(150), nullable=False)
-    category = db.Column(db.String(50), default='drone')  # 'drone', 'harvester', 'irrigation', 'tractor', 'sensor'
+    category = db.Column(db.String(50), default='drone')
     specs_json = db.Column(db.Text, nullable=True)
     price_range = db.Column(db.String(100), nullable=True)
     subsidy_available = db.Column(db.String(100), nullable=True)
